@@ -30,3 +30,20 @@
 *.exe
 *.out
 *.app
+
+
+
+# Custom added, some redundency
+
+build/
+.cmake/
+*.user
+*.suo
+.vs/
+*.pdb
+*.ilk
+*.obj
+*.lib
+*.dll
+*.exe
+*.log
