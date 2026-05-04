@@ -5,4 +5,4 @@
 //-------------------------------------
 
 #pragma once
-void engineSayHello();
+int engineSayHello();
