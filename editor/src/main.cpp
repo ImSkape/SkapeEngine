@@ -1,5 +1,5 @@
 // editor/src/main.cpp
-#include "Engine.h"
-int main() { engineSayHello(); return 0; }
+#include "engine/core/Engine.h"
+int main() { EngineRun(); return 0; }
 
 //TEST TEST

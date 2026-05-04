@@ -1,9 +1,8 @@
 // game/src/main.cpp
-#include "Engine.h"
+#include "engine/core/Engine.h"
 
 
 int main()
 {
-	engineSayHello();
-	return 0;
+	return EngineRun();
 }
