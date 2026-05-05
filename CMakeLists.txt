@@ -20,6 +20,7 @@ target_compile_definitions(EditorConfig INTERFACE ENGINE_EDITOR)
 
 # internal
 add_subdirectory(engine)
+
 option(ENGINE_EDITOR "Build as editor" OFF)
 
 if(ENGINE_EDITOR)
@@ -36,3 +37,7 @@ else()
     target_compile_options(Engine PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
+# engine/CMakeLists.txt
+if(APPLE)
+    target_compile_definitions(Engine PUBLIC GL_SILENCE_DEPRECATION)
+endif()
