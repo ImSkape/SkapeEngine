@@ -6,6 +6,7 @@
 #include "engine/core/Application.h"
 #include "engine/platform/glfw/WindowGlfw.h"
 #include "engine/core/SEResult.h"
+#include "engine/core/ServiceLocator.h"
 // TODO: remove — glClear moves to Renderer::BeginFrame(), 
 //       glfwGetTime() moves to platform Time abstraction
 #include "glad/glad.h"
@@ -92,4 +93,54 @@ void Application::Run(const std::string& projectPath)
     PostShutdown();
 
     m_window->Shutdown();
+}
+
+
+
+
+void Application::PreInit()
+{
+}
+
+void Application::Init()
+{
+}
+
+void Application::PostInit()
+{
+}
+
+void Application::Update(float dt)
+{
+}
+
+void Application::FixedUpdate(float dt)
+{
+}
+
+void Application::LateUpdate(float dt)
+{
+}
+
+void Application::Render()
+{
+}
+#ifdef ENGINE_EDITOR
+void Application::ImGuiRender()
+{
+}
+#endif
+
+
+void Application::PreShutdown()
+{
+}
+
+void Application::Shutdown()
+{
+    ServiceLocator::Clear();
+}
+
+void Application::PostShutdown()
+{
 }

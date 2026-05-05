@@ -5,6 +5,7 @@
 add_library(Engine STATIC
     src/core/Application.cpp
     include/engine/core/Application.h
+    src/core/ServiceLocator.cpp
     include/engine/core/ServiceLocator.h
     include/engine/core/SEResult.h
     include/engine/platform/Window.h

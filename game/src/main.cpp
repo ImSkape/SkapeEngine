@@ -5,6 +5,6 @@
 int main()
 {
 	Application app;
-	app.Run();
+	app.Run("hihi");
 	return 0;
 }

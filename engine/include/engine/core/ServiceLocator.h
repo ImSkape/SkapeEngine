@@ -13,25 +13,25 @@ class ServiceLocator {
 public:
     template<typename T>
     static void Register(T* service) {
-        services[typeid(T)] = service;
+        s_services[typeid(T)] = service;
     }
 
     template<typename T>
     static T* Get() {
-        auto it = services.find(typeid(T));
-        if (it == services.end()) return nullptr;
+        auto it = s_services.find(typeid(T));
+        if (it == s_services.end()) return nullptr;
         return static_cast<T*>(it->second);
     }
 
     template<typename T>
     static bool Has() {
-        return services.count(typeid(T)) > 0;
+        return s_services.count(typeid(T)) > 0;
     }
 
     static void Clear() {
-        services.clear();
+        s_services.clear();
     }
 
 private:
-    static std::unordered_map<std::type_index, void*> services;
+    static std::unordered_map<std::type_index, void*> s_services;
 };
