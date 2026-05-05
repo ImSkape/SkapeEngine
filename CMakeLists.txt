@@ -40,4 +40,5 @@ endif()
 # engine/CMakeLists.txt
 if(APPLE)
     target_compile_definitions(Engine PUBLIC GL_SILENCE_DEPRECATION)
+    target_compile_options(Engine PUBLIC -Wno-deprecated-declarations)
 endif()
