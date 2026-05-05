@@ -4,7 +4,7 @@
 // glfw window implementation
 //-------------------------------------
 
-#include "engine//platform/glfw/WindowGlfw.h"
+#include "engine/platform/glfw/WindowGlfw.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "engine/core/SEResult.h"

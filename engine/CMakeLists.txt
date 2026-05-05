@@ -30,3 +30,9 @@ target_include_directories(Engine PUBLIC
     ${CMAKE_SOURCE_DIR}/vendors/glad/include
 )
 
+# engine/CMakeLists.txt
+if(APPLE)
+    target_compile_definitions(Engine PUBLIC GL_SILENCE_DEPRECATION)
+    target_compile_options(Engine PUBLIC -Wno-deprecated-declarations)
+endif()
+
