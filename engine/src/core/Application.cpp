@@ -15,26 +15,26 @@
 
 Application::Application()
 {
-    window = std::make_unique<WindowGlfw>();
+    m_window = std::make_unique<WindowGlfw>();
 }
 
-void Application::Run()
+void Application::Run(const std::string& projectPath)
 {
     // before anything starts - config, settings overrides
-    OnPreInit();
+    PreInit();
 
     /* Initialize the library */
-    SEResult result = window->Init(640, 480, "Hello World");
+    SEResult result = m_window->Init(640, 480, "Hello World");
     if (!result) {
         printf("[Fatal] %s\n", result.message.c_str());
         return;
     }
 
     // renderer, audio, input etc will init here later
-    OnInit();
+    Init();
 
     // everything is up, spawn entities, start audio, etc
-    OnPostInit();
+    PostInit();
 
 
     // TIMING SETUP
@@ -44,7 +44,7 @@ void Application::Run()
 
     m_running = true;
     // Loop until the user closes the window
-    while (m_running && !window->ShouldClose())
+    while (m_running && !m_window->ShouldClose())
     {
         //  DELTA TIME
         float currentTime = (float)glfwGetTime();
@@ -58,38 +58,38 @@ void Application::Run()
 
         // FIXED UPDATE
         while (accumulator >= fixedTimestep) {
-            OnFixedUpdate(fixedTimestep);
+            FixedUpdate(fixedTimestep);
             accumulator -= fixedTimestep;
         }
 
         // UPDATE
         // input, camera, game logic — variable timestep
-        OnUpdate(dt);
+        Update(dt);
 
         //  LATE UPDATE
         // camera follow, animation finalize, read-only
-        OnLateUpdate(dt);
+        LateUpdate(dt);
 
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        OnRender();
+        Render();
         
         #ifdef ENGINE_EDITOR
-            OnImGuiRender();
+            ImGuiRender();
         #endif
         // PRESENT
-        window->SwapBuffers();
-        window->PollEvents();
+            m_window->SwapBuffers();
+            m_window->PollEvents();
     }
 
     // save state, flush anything in flight
-    OnPreShutdown();
+    PreShutdown();
 
     // engine systems tear down — logging flush etc
-    OnShutdown();
+    Shutdown();
 
     //Anything left hanging
-    OnPostShutdown();
+    PostShutdown();
 
-    window->Shutdown();
+    m_window->Shutdown();
 }

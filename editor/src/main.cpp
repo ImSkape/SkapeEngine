@@ -3,7 +3,7 @@
 int main()
 {
 	Application app;
-	app.Run();
+	app.Run("projects/MyGame/project.yaml");
 	return 0;
 }
 
