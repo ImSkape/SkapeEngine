@@ -10,6 +10,9 @@ set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
+
+
+
 # vendors
 add_subdirectory(vendors/glfw)
 add_subdirectory(vendors/glm)
@@ -20,6 +23,22 @@ target_compile_definitions(EditorConfig INTERFACE ENGINE_EDITOR)
 
 # internal
 add_subdirectory(engine)
+
+set(GFX_BACKEND "OpenGL" CACHE STRING "Graphics backend")
+set_property(CACHE GFX_BACKEND PROPERTY STRINGS "OpenGL" "Vulkan" "Metal" "D3D12")
+
+if(GFX_BACKEND STREQUAL "OpenGL")
+    target_compile_definitions(Engine PUBLIC GFX_OPENGL)
+elseif(GFX_BACKEND STREQUAL "Vulkan")
+    target_compile_definitions(Engine PUBLIC GFX_VULKAN)
+elseif(GFX_BACKEND STREQUAL "Metal")
+    target_compile_definitions(Engine PUBLIC GFX_METAL)
+elseif(GFX_BACKEND STREQUAL "D3D12")
+    target_compile_definitions(Engine PUBLIC GFX_D3D12)
+endif()
+
+
+
 
 option(ENGINE_EDITOR "Build as editor" OFF)
 

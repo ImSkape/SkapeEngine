@@ -70,6 +70,11 @@ void WindowGlfw::Shutdown()
     glfwTerminate();
 }
 
+GLFWwindow* WindowGlfw::GetGLFWWindow()
+{
+    return window;
+}
+
 
 void WindowGlfw::SetupOpenGLDebugCallback()
 {

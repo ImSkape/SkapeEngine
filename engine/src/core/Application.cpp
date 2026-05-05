@@ -11,6 +11,7 @@
 //       glfwGetTime() moves to platform Time abstraction
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
+#include "engine/renderer/Renderer.h"
 #include <cstdio>
 #include <memory>
 
@@ -21,15 +22,12 @@ Application::Application()
 
 void Application::Run(const std::string& projectPath)
 {
+    InitEngine();
+
     // before anything starts - config, settings overrides
     PreInit();
 
-    /* Initialize the library */
-    SEResult result = m_window->Init(640, 480, "Hello World");
-    if (!result) {
-        printf("[Fatal] %s\n", result.message.c_str());
-        return;
-    }
+
 
     // renderer, audio, input etc will init here later
     Init();
@@ -71,15 +69,12 @@ void Application::Run(const std::string& projectPath)
         // camera follow, animation finalize, read-only
         LateUpdate(dt);
 
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
         Render();
         
         #ifdef ENGINE_EDITOR
             ImGuiRender();
         #endif
         // PRESENT
-            m_window->SwapBuffers();
             m_window->PollEvents();
     }
 
@@ -92,11 +87,36 @@ void Application::Run(const std::string& projectPath)
     //Anything left hanging
     PostShutdown();
 
-    m_window->Shutdown();
+
+
+    ShutdownEngine();
 }
 
 
 
+
+void Application::InitEngine()
+{
+    /* Initialize the library */
+    SEResult result = m_window->Init(1280, 720, "Skape Engine");
+    if (!result) {
+        printf("[Fatal] %s\n", result.message.c_str());
+        return;
+    }
+
+
+    SEResult rendererResult = m_renderer.Init(static_cast<WindowGlfw*>(m_window.get())->GetGLFWWindow());
+    if (!rendererResult) {
+        printf("[Fatal] %s\n", rendererResult.message.c_str());
+        return;
+    }
+}
+
+void Application::ShutdownEngine()
+{
+    m_renderer.Shutdown();
+    m_window->Shutdown();
+}
 
 void Application::PreInit()
 {
@@ -104,6 +124,7 @@ void Application::PreInit()
 
 void Application::Init()
 {
+
 }
 
 void Application::PostInit()
@@ -124,7 +145,14 @@ void Application::LateUpdate(float dt)
 
 void Application::Render()
 {
+    m_renderer.BeginFrame();
+    // scene rendering goes here later
+    m_renderer.EndFrame();
 }
+
+
+
+
 #ifdef ENGINE_EDITOR
 void Application::ImGuiRender()
 {

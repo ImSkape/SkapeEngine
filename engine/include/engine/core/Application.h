@@ -6,6 +6,7 @@
 
 #pragma once
 #include "engine/platform/Window.h"
+#include "engine/renderer/Renderer.h"
 #include <memory>
 
 class Application {
@@ -15,6 +16,10 @@ public:
     void Quit();
 
 private:
+
+    void InitEngine();
+    void ShutdownEngine();
+
     // -- INIT ------------------------------------------
     void PreInit();  // before engine systems start
     // set config, override settings
@@ -67,5 +72,6 @@ private:
 
 private:
     std::unique_ptr<Window> m_window;
+    Renderer m_renderer;
     bool m_running = false;
 };

@@ -16,6 +16,7 @@ public:
     bool ShouldClose() override;
     void SwapBuffers() override;
     void Shutdown() override;
+    GLFWwindow* GetGLFWWindow();
 
 private:
     GLFWwindow* window = nullptr;
