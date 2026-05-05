@@ -19,4 +19,5 @@ public:
 
 private:
     GLFWwindow* window = nullptr;
+    void SetupOpenGLDebugCallback();
 };

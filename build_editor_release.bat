@@ -1,5 +1,5 @@
-:: build_release.bat
+:: build_debug.bat
 @echo off
 call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
-cmake --build build --config Release -- /m
+cmake --build build-editor --config Release -- /m
 pause

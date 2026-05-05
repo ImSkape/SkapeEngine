@@ -1,6 +1,7 @@
-:: clean.bat
 @echo off
-echo Deleting build folder...
-rmdir /s /q build
+echo Cleaning editor build...
+rmdir /s /q build-editor
+echo Cleaning game build...
+rmdir /s /q build-game
 echo Done.
 pause

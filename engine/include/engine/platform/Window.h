@@ -6,6 +6,10 @@
 #pragma once
 #include <string>
 class SEResult;
+
+/// <summary>
+/// Pure virtual API for window events. 
+/// </summary>
 class Window {
 public:
     virtual ~Window() = default;

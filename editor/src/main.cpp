@@ -1,5 +1,10 @@
 // editor/src/main.cpp
-#include "engine/core/Engine.h"
-int main() { EngineRun(); return 0; }
+#include "engine/core/Application.h"
+int main()
+{
+	Application app;
+	app.Run();
+	return 0;
+}
 
 //TEST TEST

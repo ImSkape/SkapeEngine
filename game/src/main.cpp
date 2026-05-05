@@ -1,8 +1,10 @@
 // game/src/main.cpp
-#include "engine/core/Engine.h"
+#include "engine/core/Application.h"
 
 
 int main()
 {
-	return EngineRun();
+	Application app;
+	app.Run();
+	return 0;
 }

@@ -36,6 +36,8 @@
 # Custom added, some redundency
 
 build/
+build-editor/
+build-game/
 .cmake/
 *.user
 *.suo
