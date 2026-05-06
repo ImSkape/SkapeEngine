@@ -18,20 +18,35 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Configure CMake
-        run: cmake -B build -G "Visual Studio 17 2022" -A x64
+      - name: Configure CMake — Game
+        run: cmake -B build-game -G "Visual Studio 17 2022" -A x64 -DBUILD_EDITOR=OFF
 
-      - name: Build Debug
-        run: cmake --build build --config Debug -- /m
+      - name: Build Game Debug
+        run: cmake --build build-game --config Debug -- /m
 
-      - name: Run Debug headless
-        run: ./build/Debug/Game.exe --headless
+      - name: Run Game Debug headless
+        run: build-game\Debug\Game.exe --headless
 
-      - name: Build Release
-        run: cmake --build build --config Release -- /m
+      - name: Build Game Release
+        run: cmake --build build-game --config Release -- /m
 
-      - name: Run Release headless
-        run: ./build/Release/Game.exe --headless
+      - name: Run Game Release headless
+        run: build-game\Release\Game.exe --headless
+
+      - name: Configure CMake — Editor
+        run: cmake -B build-editor -G "Visual Studio 17 2022" -A x64 -DBUILD_EDITOR=ON
+
+      - name: Build Editor Debug
+        run: cmake --build build-editor --config Debug -- /m
+
+      - name: Run Editor Debug headless
+        run: build-editor\Debug\Editor.exe --headless
+
+      - name: Build Editor Release
+        run: cmake --build build-editor --config Release -- /m
+
+      - name: Run Editor Release headless
+        run: build-editor\Release\Editor.exe --headless
 
   # -- MAC -------------------------------------
   build-mac:
@@ -43,23 +58,44 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Configure CMake
+# build-mac job
+      - name: Configure CMake — Game
         run: |
-          cmake -B build \
+          cmake -B build-game \
             -G "Xcode" \
-            -DCMAKE_OSX_DEPLOYMENT_TARGET=10.14
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=10.14 \
+            -DBUILD_EDITOR=OFF
 
-      - name: Build Debug
-        run: cmake --build build --config Debug
+      - name: Build Game Debug
+        run: cmake --build build-game --config Debug
 
-      - name: Run Debug headless
-        run: ./build/Debug/Game --headless
+      - name: Run Game Debug headless
+        run: ./build-game/Debug/Game --headless
 
-      - name: Build Release
-        run: cmake --build build --config Release
+      - name: Build Game Release
+        run: cmake --build build-game --config Release
 
-      - name: Run Release headless
-        run: ./build/Release/Game --headless
+      - name: Run Game Release headless
+        run: ./build-game/Release/Game --headless
+
+      - name: Configure CMake — Editor
+        run: |
+          cmake -B build-editor \
+            -G "Xcode" \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=10.14 \
+            -DBUILD_EDITOR=ON
+
+      - name: Build Editor Debug
+        run: cmake --build build-editor --config Debug
+
+      - name: Run Editor Debug headless
+        run: ./build-editor/Debug/Editor --headless
+
+      - name: Build Editor Release
+        run: cmake --build build-editor --config Release
+
+      - name: Run Editor Release headless
+        run: ./build-editor/Release/Editor --headless
 
   # -- LINUX -------------------------------------------
   build-linux:
@@ -92,18 +128,42 @@ jobs:
       - name: Install virtual display
         run: sudo apt-get install -y xvfb
 
-      - name: Build Debug
+      - name: Build Game Debug
         run: |
-          cmake -B build -G "Ninja" -DCMAKE_BUILD_TYPE=Debug
-          cmake --build build
+          cmake -B build-game -G "Ninja" \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DBUILD_EDITOR=OFF
+          cmake --build build-game
 
-      - name: Run Debug headless
-        run: xvfb-run ./build/Game --headless
+      - name: Run Game Debug headless
+        run: xvfb-run ./build-game/Game --headless
 
-      - name: Build Release
+      - name: Build Game Release
         run: |
-          cmake -B build-release -G "Ninja" -DCMAKE_BUILD_TYPE=Release
-          cmake --build build-release
+          cmake -B build-game-release -G "Ninja" \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBUILD_EDITOR=OFF
+          cmake --build build-game-release
 
-      - name: Run Release headless
-        run: xvfb-run ./build-release/Game --headless
+      - name: Run Game Release headless
+        run: xvfb-run ./build-game-release/Game --headless
+
+      - name: Build Editor Debug
+        run: |
+          cmake -B build-editor -G "Ninja" \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DBUILD_EDITOR=ON
+          cmake --build build-editor
+
+      - name: Run Editor Debug headless
+        run: xvfb-run ./build-editor/Editor --headless
+
+      - name: Build Editor Release
+        run: |
+          cmake -B build-editor-release -G "Ninja" \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBUILD_EDITOR=ON
+          cmake --build build-editor-release
+
+      - name: Run Editor Release headless
+        run: xvfb-run ./build-editor-release/Editor --headless
