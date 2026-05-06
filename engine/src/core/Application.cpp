@@ -260,10 +260,12 @@ void Application::PreShutdown()
 
 void Application::Shutdown()
 {
-    m_triangleVBO.reset();
-    m_triangleShader.reset();
-    m_cmd.reset();
-    m_mainPass.reset();
+    if (!m_headless) {
+        m_triangleVBO.reset();
+        m_triangleShader.reset();
+        m_cmd.reset();
+        m_mainPass.reset();
+    }
     ServiceLocator::Clear();
 }
 
