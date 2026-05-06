@@ -9,6 +9,11 @@
 #include "engine/renderer/Renderer.h"
 #include <memory>
 
+#include "engine/renderer/GPUBuffer.h"
+#include "engine/renderer/GPUShader.h"
+#include "engine/renderer/CommandBuffer.h"
+#include "engine/renderer/RenderPass.h"
+
 class Application {
 public:
     Application();
@@ -74,4 +79,12 @@ private:
     std::unique_ptr<Window> m_window;
     Renderer m_renderer;
     bool m_running = false;
+
+
+    // temporary triangle test — remove when scene system exists
+    std::unique_ptr<GPUBuffer>     m_triangleVBO;
+    std::unique_ptr<GPUShader>     m_triangleShader;
+    std::unique_ptr<CommandBuffer> m_cmd;
+    std::unique_ptr<RenderPass>    m_mainPass;
+
 };

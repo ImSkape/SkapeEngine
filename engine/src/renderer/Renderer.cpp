@@ -29,10 +29,14 @@ void Renderer::Shutdown() {
 
 void Renderer::BeginFrame() {
     // glClear moves here from Application
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void Renderer::EndFrame() {
     m_context->Present();
+}
+
+void Renderer::Submit(CommandBuffer& cmd) {
+    m_context->Submit(cmd);
 }

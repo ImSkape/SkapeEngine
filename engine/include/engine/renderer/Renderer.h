@@ -22,7 +22,7 @@ public:
     GFXContext& GetContext() { return *m_context; }
 
     // convenience — submit a command buffer
-    void Submit(CommandBuffer& cmd) { m_context->Submit(cmd); }
+    void Submit(CommandBuffer& cmd);
 
 private:
     std::unique_ptr<GFXContext>    m_context;
