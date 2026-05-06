@@ -18,37 +18,41 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Configure CMake — Game
+      - name: Configure CMake - Game
         run: cmake -B build-game -G "Visual Studio 17 2022" -A x64 -DBUILD_EDITOR=OFF
 
       - name: Build Game Debug
         run: cmake --build build-game --config Debug -- /m
 
       - name: Run Game Debug headless
+        shell: pwsh
         run: & "build-game\Debug\Game.exe" --headless
 
       - name: Build Game Release
         run: cmake --build build-game --config Release -- /m
 
       - name: Run Game Release headless
+        shell: pwsh
         run: & "build-game\Release\Game.exe" --headless
 
-      - name: Configure CMake — Editor
+      - name: Configure CMake - Editor
         run: cmake -B build-editor -G "Visual Studio 17 2022" -A x64 -DBUILD_EDITOR=ON
 
       - name: Build Editor Debug
         run: cmake --build build-editor --config Debug -- /m
 
       - name: Run Editor Debug headless
+        shell: pwsh
         run: & "build-editor\Debug\Editor.exe" --headless
 
       - name: Build Editor Release
         run: cmake --build build-editor --config Release -- /m
 
       - name: Run Editor Release headless
+        shell: pwsh
         run: & "build-editor\Release\Editor.exe" --headless
 
-  # -- MAC -------------------------------------
+  # -- MAC ----------------------------------------
   build-mac:
     runs-on: macos-latest
 
@@ -58,8 +62,7 @@ jobs:
         with:
           submodules: recursive
 
-# build-mac job
-      - name: Configure CMake — Game
+      - name: Configure CMake - Game
         run: |
           cmake -B build-game \
             -G "Xcode" \
@@ -69,7 +72,7 @@ jobs:
       - name: Build Game Debug
         run: cmake --build build-game --config Debug
 
-      - name: Find executables
+      - name: Find Game executables
         run: find build-game -name "Game" -o -name "Game.exe" 2>/dev/null
 
       - name: Run Game Debug headless
@@ -81,7 +84,7 @@ jobs:
       - name: Run Game Release headless
         run: ./build-game/Release/Game --headless
 
-      - name: Configure CMake — Editor
+      - name: Configure CMake - Editor
         run: |
           cmake -B build-editor \
             -G "Xcode" \
@@ -90,6 +93,9 @@ jobs:
 
       - name: Build Editor Debug
         run: cmake --build build-editor --config Debug
+
+      - name: Find Editor executables
+        run: find build-editor -name "Editor" -o -name "Editor.exe" 2>/dev/null
 
       - name: Run Editor Debug headless
         run: ./build-editor/Debug/Editor --headless
@@ -100,7 +106,7 @@ jobs:
       - name: Run Editor Release headless
         run: ./build-editor/Release/Editor --headless
 
-  # -- LINUX -------------------------------------------
+  # -- LINUX --------------------------------------
   build-linux:
     runs-on: ubuntu-latest
 
@@ -126,10 +132,8 @@ jobs:
             libwayland-dev \
             wayland-protocols \
             libxkbcommon-dev \
-            pkg-config
-
-      - name: Install virtual display
-        run: sudo apt-get install -y xvfb
+            pkg-config \
+            xvfb
 
       - name: Build Game Debug
         run: |
@@ -138,8 +142,7 @@ jobs:
             -DBUILD_EDITOR=OFF
           cmake --build build-game
 
-
-      - name: Find executables
+      - name: Find Game executables
         run: find build-game -type f -executable 2>/dev/null
 
       - name: Run Game Debug headless
