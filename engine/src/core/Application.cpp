@@ -152,25 +152,26 @@ void Application::PreInit()
 
 void Application::Init()
 {
-    // position (xyz), normal (xyz), uv (xy) per vertex
-    static float s_triangleVertices[] = {
-        // position          normal            uv
-        -0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f,  // bottom left
-         0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  1.0f, 0.0f,  // bottom right
-         0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  0.5f, 1.0f,  // top middle
-    };
+    if (!m_headless) {
+        // position (xyz), normal (xyz), uv (xy) per vertex
+        static float s_triangleVertices[] = {
+            // position          normal            uv
+            -0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f,  // bottom left
+             0.5f, -0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  1.0f, 0.0f,  // bottom right
+             0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  0.5f, 1.0f,  // top middle
+        };
 
-    auto& ctx = m_renderer.GetContext();
-    m_triangleVBO = ctx.CreateBuffer(
-        BufferType::Vertex,
-        BufferUsage::Static,
-        sizeof(s_triangleVertices)
-    );
+        auto& ctx = m_renderer.GetContext();
+        m_triangleVBO = ctx.CreateBuffer(
+            BufferType::Vertex,
+            BufferUsage::Static,
+            sizeof(s_triangleVertices)
+        );
 
-    m_triangleVBO->Upload(s_triangleVertices, sizeof(s_triangleVertices));
+        m_triangleVBO->Upload(s_triangleVertices, sizeof(s_triangleVertices));
 
-    // create shader from source strings
-    const char* vertSrc = R"(
+        // create shader from source strings
+        const char* vertSrc = R"(
         #version 410 core
         layout(location = 0) in vec3 a_Position;
         layout(location = 1) in vec3 a_Normal;
@@ -180,7 +181,7 @@ void Application::Init()
         }
     )";
 
-    const char* fragSrc = R"(
+        const char* fragSrc = R"(
         #version 410 core
         out vec4 fragColor;
         void main() {
@@ -188,20 +189,21 @@ void Application::Init()
         }
     )";
 
-    m_triangleShader = ctx.CreateShader(vertSrc, fragSrc);
+        m_triangleShader = ctx.CreateShader(vertSrc, fragSrc);
 
-    m_cmd = ctx.CreateCommandBuffer();
+        m_cmd = ctx.CreateCommandBuffer();
 
-    // create main render pass — width/height 0 = render to window
-    RenderPassSpec passSpec;
-    passSpec.width = 0;
-    passSpec.height = 0;
-    AttachmentSpec colorAttachment;
-    colorAttachment.clearColor = { 0.1f, 0.1f, 0.1f, 1.0f };
-    colorAttachment.loadOp = LoadOp::Clear;
-    passSpec.colorAttachments.push_back(colorAttachment);
-    passSpec.depthAttachment.loadOp = LoadOp::Clear;
-    m_mainPass = ctx.CreateRenderPass(passSpec);
+        // create main render pass — width/height 0 = render to window
+        RenderPassSpec passSpec;
+        passSpec.width = 0;
+        passSpec.height = 0;
+        AttachmentSpec colorAttachment;
+        colorAttachment.clearColor = { 0.1f, 0.1f, 0.1f, 1.0f };
+        colorAttachment.loadOp = LoadOp::Clear;
+        passSpec.colorAttachments.push_back(colorAttachment);
+        passSpec.depthAttachment.loadOp = LoadOp::Clear;
+        m_mainPass = ctx.CreateRenderPass(passSpec);
+    }
 
 }
 
