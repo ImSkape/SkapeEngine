@@ -25,15 +25,15 @@ jobs:
         run: cmake --build build-game --config Debug -- /m
 
       - name: Run Game Debug headless
-        shell: pwsh
-        run: & "build-game\Debug\Game.exe" --headless
+        shell: cmd
+        run: build-game\Debug\Game.exe --headless
 
       - name: Build Game Release
         run: cmake --build build-game --config Release -- /m
 
       - name: Run Game Release headless
-        shell: pwsh
-        run: & "build-game\Release\Game.exe" --headless
+        shell: cmd
+        run: build-game\Release\Game.exe --headless
 
       - name: Configure CMake - Editor
         run: cmake -B build-editor -G "Visual Studio 17 2022" -A x64 -DBUILD_EDITOR=ON
@@ -42,15 +42,15 @@ jobs:
         run: cmake --build build-editor --config Debug -- /m
 
       - name: Run Editor Debug headless
-        shell: pwsh
-        run: & "build-editor\Debug\Editor.exe" --headless
+        shell: cmd
+        run: build-editor\Debug\Editor.exe --headless
 
       - name: Build Editor Release
         run: cmake --build build-editor --config Release -- /m
 
       - name: Run Editor Release headless
-        shell: pwsh
-        run: & "build-editor\Release\Editor.exe" --headless
+        shell: cmd
+        run: build-editor\Release\Editor.exe --headless
 
   # -- MAC ----------------------------------------
   build-mac:
