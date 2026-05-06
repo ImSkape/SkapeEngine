@@ -26,14 +26,14 @@ jobs:
 
       - name: Run Game Debug headless
         shell: cmd
-        run: build-game\Debug\Game.exe --headless
+        run: build-game\game\Debug\Game.exe --headless
 
       - name: Build Game Release
         run: cmake --build build-game --config Release -- /m
 
       - name: Run Game Release headless
         shell: cmd
-        run: build-game\Release\Game.exe --headless
+        run: build-game\game\Release\Game.exe --headless
 
       - name: Configure CMake - Editor
         run: cmake -B build-editor -G "Visual Studio 17 2022" -A x64 -DBUILD_EDITOR=ON
@@ -43,14 +43,14 @@ jobs:
 
       - name: Run Editor Debug headless
         shell: cmd
-        run: build-editor\Debug\Editor.exe --headless
+        run: build-editor\editor\Debug\Editor.exe --headless
 
       - name: Build Editor Release
         run: cmake --build build-editor --config Release -- /m
 
       - name: Run Editor Release headless
         shell: cmd
-        run: build-editor\Release\Editor.exe --headless
+        run: build-editor\editor\Release\Editor.exe --headless
 
   # -- MAC ----------------------------------------
   build-mac:
@@ -76,13 +76,13 @@ jobs:
         run: find build-game -name "Game" -o -name "Game.exe" 2>/dev/null
 
       - name: Run Game Debug headless
-        run: ./build-game/Debug/Game --headless
+        run: ./build-game/game/Debug/Game --headless
 
       - name: Build Game Release
         run: cmake --build build-game --config Release
 
       - name: Run Game Release headless
-        run: ./build-game/Release/Game --headless
+        run: ./build-game/game/Release/Game --headless
 
       - name: Configure CMake - Editor
         run: |
@@ -98,13 +98,13 @@ jobs:
         run: find build-editor -name "Editor" -o -name "Editor.exe" 2>/dev/null
 
       - name: Run Editor Debug headless
-        run: ./build-editor/Debug/Editor --headless
+        run: ./build-editor/editor/Debug/Editor --headless
 
       - name: Build Editor Release
         run: cmake --build build-editor --config Release
 
       - name: Run Editor Release headless
-        run: ./build-editor/Release/Editor --headless
+        run: ./build-editor/editor/Release/Editor --headless
 
   # -- LINUX --------------------------------------
   build-linux:
@@ -146,7 +146,7 @@ jobs:
         run: find build-game -type f -executable 2>/dev/null
 
       - name: Run Game Debug headless
-        run: xvfb-run ./build-game/Game --headless
+        run: xvfb-run ./build-game/game/Game --headless
 
       - name: Build Game Release
         run: |
@@ -156,7 +156,7 @@ jobs:
           cmake --build build-game-release
 
       - name: Run Game Release headless
-        run: xvfb-run ./build-game-release/Game --headless
+        run: xvfb-run ./build-game-release/game/Game --headless
 
       - name: Build Editor Debug
         run: |
@@ -166,7 +166,7 @@ jobs:
           cmake --build build-editor
 
       - name: Run Editor Debug headless
-        run: xvfb-run ./build-editor/Editor --headless
+        run: xvfb-run ./build-editor/editor/Editor --headless
 
       - name: Build Editor Release
         run: |
@@ -176,4 +176,4 @@ jobs:
           cmake --build build-editor-release
 
       - name: Run Editor Release headless
-        run: xvfb-run ./build-editor-release/Editor --headless
+        run: xvfb-run ./build-editor-release/editor/Editor --headless
