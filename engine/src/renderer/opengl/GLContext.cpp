@@ -5,9 +5,14 @@
 //-------------------------------------
 
 #include "engine/renderer/opengl/GLContext.h"
+#include "engine/renderer/opengl/GLBuffer.h"
+#include "engine/renderer/opengl/GLShader.h"
+#include "engine/renderer/opengl/GLRenderPass.h"
+#include "engine/renderer/opengl/GLCommandBuffer.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <cstdio>
+#include <memory>
 
 SEResult GLContext::Init(GLFWwindow* window) {
     m_window = window;
@@ -36,8 +41,25 @@ void GLContext::Submit(CommandBuffer& cmd) {
 }
 
 // stubs for now — implement each when you get to that object
-std::unique_ptr<GPUBuffer>     GLContext::CreateBuffer(BufferType, BufferUsage, uint32_t) { return nullptr; }
-std::unique_ptr<GPUShader>     GLContext::CreateShader(const std::string&, const std::string&) { return nullptr; }
-std::unique_ptr<GPUTexture>    GLContext::CreateTexture(const TextureSpec&) { return nullptr; }
-std::unique_ptr<RenderPass>    GLContext::CreateRenderPass(const RenderPassSpec&) { return nullptr; }
-std::unique_ptr<CommandBuffer> GLContext::CreateCommandBuffer() { return nullptr; }
+std::unique_ptr<GPUBuffer> GLContext::CreateBuffer(
+    BufferType type, BufferUsage usage, uint32_t size) {
+    return std::make_unique<GLBuffer>(type, usage, size);
+}
+
+std::unique_ptr<GPUShader> GLContext::CreateShader(
+    const std::string& vert, const std::string& frag) {
+    return std::make_unique<GLShader>(vert, frag);
+}
+
+std::unique_ptr<RenderPass> GLContext::CreateRenderPass(
+    const RenderPassSpec& spec) {
+    return std::make_unique<GLRenderPass>(spec);
+}
+
+std::unique_ptr<CommandBuffer> GLContext::CreateCommandBuffer() {
+    return std::make_unique<GLCommandBuffer>();
+}
+std::unique_ptr<GPUTexture> GLContext::CreateTexture(const TextureSpec& spec) {
+    // TODO: implement GLTexture
+    return nullptr;
+}

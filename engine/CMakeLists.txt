@@ -16,6 +16,11 @@ include/engine/renderer/Pipeline.h
 include/engine/renderer/Renderer.h
 include/engine/renderer/RenderPass.h
 include/engine/renderer/opengl/GLContext.h
+include/engine/renderer/opengl/GLCommandBuffer.h
+include/engine/renderer/opengl/GLRenderPass.h
+include/engine/renderer/opengl/GLBuffer.h
+include/engine/renderer/opengl/GLShader.h
+include/engine/renderer/opengl/GLTexture.h
 src/core/Application.cpp
 src/core/ServiceLocator.cpp
 src/platform/glfw/WindowGlfw.cpp
