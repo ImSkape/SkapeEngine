@@ -19,7 +19,7 @@ jobs:
           submodules: recursive
 
       - name: Configure CMake - Game
-        run: cmake -B build-game -G "Visual Studio 17 2022" -A x64 -DBUILD_EDITOR=OFF
+        run: cmake -B build-game -G "Visual Studio 17 2022" -A x64 -DENGINE_EDITOR=OFF
 
       - name: Build Game Debug
         run: cmake --build build-game --config Debug -- /m
@@ -36,7 +36,7 @@ jobs:
         run: build-game\game\Release\Game.exe --headless
 
       - name: Configure CMake - Editor
-        run: cmake -B build-editor -G "Visual Studio 17 2022" -A x64 -DBUILD_EDITOR=ON
+        run: cmake -B build-editor -G "Visual Studio 17 2022" -A x64 -DENGINE_EDITOR=ON
 
       - name: Build Editor Debug
         run: cmake --build build-editor --config Debug -- /m
@@ -67,7 +67,7 @@ jobs:
           cmake -B build-game \
             -G "Xcode" \
             -DCMAKE_OSX_DEPLOYMENT_TARGET=10.14 \
-            -DBUILD_EDITOR=OFF
+            -DENGINE_EDITOR=OFF
 
       - name: Build Game Debug
         run: cmake --build build-game --config Debug
@@ -89,7 +89,7 @@ jobs:
           cmake -B build-editor \
             -G "Xcode" \
             -DCMAKE_OSX_DEPLOYMENT_TARGET=10.14 \
-            -DBUILD_EDITOR=ON
+            -DENGINE_EDITOR=ON
 
       - name: Build Editor Debug
         run: cmake --build build-editor --config Debug
@@ -139,7 +139,7 @@ jobs:
         run: |
           cmake -B build-game -G "Ninja" \
             -DCMAKE_BUILD_TYPE=Debug \
-            -DBUILD_EDITOR=OFF
+            -DENGINE_EDITOR=OFF
           cmake --build build-game
 
       - name: Find Game executables
@@ -152,7 +152,7 @@ jobs:
         run: |
           cmake -B build-game-release -G "Ninja" \
             -DCMAKE_BUILD_TYPE=Release \
-            -DBUILD_EDITOR=OFF
+            -DENGINE_EDITOR=OFF
           cmake --build build-game-release
 
       - name: Run Game Release headless
@@ -162,7 +162,7 @@ jobs:
         run: |
           cmake -B build-editor -G "Ninja" \
             -DCMAKE_BUILD_TYPE=Debug \
-            -DBUILD_EDITOR=ON
+            -DENGINE_EDITOR=ON
           cmake --build build-editor
 
       - name: Run Editor Debug headless
@@ -172,7 +172,7 @@ jobs:
         run: |
           cmake -B build-editor-release -G "Ninja" \
             -DCMAKE_BUILD_TYPE=Release \
-            -DBUILD_EDITOR=ON
+            -DENGINE_EDITOR=ON
           cmake --build build-editor-release
 
       - name: Run Editor Release headless
