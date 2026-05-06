@@ -25,13 +25,13 @@ jobs:
         run: cmake --build build-game --config Debug -- /m
 
       - name: Run Game Debug headless
-        run: build-game\Debug\Game.exe --headless
+        run: & "build-game\Debug\Game.exe" --headless
 
       - name: Build Game Release
         run: cmake --build build-game --config Release -- /m
 
       - name: Run Game Release headless
-        run: build-game\Release\Game.exe --headless
+        run: & "build-game\Release\Game.exe" --headless
 
       - name: Configure CMake — Editor
         run: cmake -B build-editor -G "Visual Studio 17 2022" -A x64 -DBUILD_EDITOR=ON
@@ -40,13 +40,13 @@ jobs:
         run: cmake --build build-editor --config Debug -- /m
 
       - name: Run Editor Debug headless
-        run: build-editor\Debug\Editor.exe --headless
+        run: & "build-editor\Debug\Editor.exe" --headless
 
       - name: Build Editor Release
         run: cmake --build build-editor --config Release -- /m
 
       - name: Run Editor Release headless
-        run: build-editor\Release\Editor.exe --headless
+        run: & "build-editor\Release\Editor.exe" --headless
 
   # -- MAC -------------------------------------
   build-mac:
@@ -68,6 +68,9 @@ jobs:
 
       - name: Build Game Debug
         run: cmake --build build-game --config Debug
+
+      - name: Find executables
+        run: find build-game -name "Game" -o -name "Game.exe" 2>/dev/null
 
       - name: Run Game Debug headless
         run: ./build-game/Debug/Game --headless
@@ -134,6 +137,10 @@ jobs:
             -DCMAKE_BUILD_TYPE=Debug \
             -DBUILD_EDITOR=OFF
           cmake --build build-game
+
+
+      - name: Find executables
+        run: find build-game -type f -executable 2>/dev/null
 
       - name: Run Game Debug headless
         run: xvfb-run ./build-game/Game --headless
