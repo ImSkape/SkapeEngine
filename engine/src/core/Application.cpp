@@ -92,30 +92,58 @@ void Application::Run(const std::string& projectPath)
     ShutdownEngine();
 }
 
+void Application::RunHeadless(const std::string& projectPath, int frames)
+{
+    m_headless = true;
+    InitEngine();
+    PreInit();
+    Init();
+    PostInit();
+    float fixedTimestep = 1.0f / 60.0f;
+    for (int i = 0; i < frames; i++) {
+        FixedUpdate(fixedTimestep);
+        Update(fixedTimestep);
+        LateUpdate(fixedTimestep);
+        // no render — no window or GPU context in headless
+    }
+
+    PreShutdown();
+    Shutdown();
+    PostShutdown();
+    ShutdownEngine();
+}
+
 
 
 
 void Application::InitEngine()
 {
-    /* Initialize the library */
-    SEResult result = m_window->Init(1280, 720, "Skape Engine");
-    if (!result) {
-        printf("[Fatal] %s\n", result.message.c_str());
-        return;
-    }
+    if (!m_headless) {
+
+        /* Initialize the library */
+        SEResult result = m_window->Init(1280, 720, "Skape Engine");
+        if (!result) {
+            printf("[Fatal] %s\n", result.message.c_str());
+            return;
+        }
 
 
-    SEResult rendererResult = m_renderer.Init(static_cast<WindowGlfw*>(m_window.get())->GetGLFWWindow());
-    if (!rendererResult) {
-        printf("[Fatal] %s\n", rendererResult.message.c_str());
-        return;
+        SEResult rendererResult = m_renderer.Init(static_cast<WindowGlfw*>(m_window.get())->GetGLFWWindow());
+        if (!rendererResult) {
+            printf("[Fatal] %s\n", rendererResult.message.c_str());
+            return;
+        }
     }
+    ServiceLocator::Register<Renderer>(&m_renderer);
+
 }
 
 void Application::ShutdownEngine()
 {
-    m_renderer.Shutdown();
-    m_window->Shutdown();
+    if (!m_headless) {
+        m_renderer.Shutdown();
+        m_window->Shutdown();
+    }
 }
 
 void Application::PreInit()
@@ -195,6 +223,7 @@ void Application::LateUpdate(float dt)
 
 void Application::Render()
 {
+    if (m_headless) return;
     m_renderer.BeginFrame();
     // scene rendering goes here later
 

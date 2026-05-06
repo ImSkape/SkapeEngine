@@ -22,10 +22,16 @@ jobs:
         run: cmake -B build -G "Visual Studio 17 2022" -A x64
 
       - name: Build Debug
-        run: cmake --build build --config Debug
+        run: cmake --build build --config Debug -- /m
+
+      - name: Run Debug headless
+        run: ./build/Debug/Game.exe --headless
 
       - name: Build Release
-        run: cmake --build build --config Release
+        run: cmake --build build --config Release -- /m
+
+      - name: Run Release headless
+        run: ./build/Release/Game.exe --headless
 
   # -- MAC -------------------------------------
   build-mac:
@@ -46,8 +52,14 @@ jobs:
       - name: Build Debug
         run: cmake --build build --config Debug
 
+      - name: Run Debug headless
+        run: ./build/Debug/Game --headless
+
       - name: Build Release
         run: cmake --build build --config Release
+
+      - name: Run Release headless
+        run: ./build/Release/Game --headless
 
   # -- LINUX -------------------------------------------
   build-linux:
@@ -77,12 +89,21 @@ jobs:
             libxkbcommon-dev \
             pkg-config
 
+      - name: Install virtual display
+        run: sudo apt-get install -y xvfb
+
       - name: Build Debug
         run: |
           cmake -B build -G "Ninja" -DCMAKE_BUILD_TYPE=Debug
           cmake --build build
 
+      - name: Run Debug headless
+        run: xvfb-run ./build/Game --headless
+
       - name: Build Release
         run: |
           cmake -B build-release -G "Ninja" -DCMAKE_BUILD_TYPE=Release
           cmake --build build-release
+
+      - name: Run Release headless
+        run: xvfb-run ./build-release/Game --headless

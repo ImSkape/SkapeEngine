@@ -18,6 +18,7 @@ class Application {
 public:
     Application();
     void Run(const std::string& projectPath);
+    void RunHeadless(const std::string& projectPath, int frames = 10);
     void Quit();
 
 private:
@@ -80,6 +81,7 @@ private:
     Renderer m_renderer;
     bool m_running = false;
 
+    bool m_headless = false;
 
     // temporary triangle test — remove when scene system exists
     std::unique_ptr<GPUBuffer>     m_triangleVBO;
