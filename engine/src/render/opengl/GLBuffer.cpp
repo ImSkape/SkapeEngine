@@ -4,7 +4,7 @@
 // Holds opengl data
 //-------------------------------------
 
-#include "engine/render_system/opengl/GLBuffer.h"
+#include "engine/render/opengl/GLBuffer.h"
 #include <glad/glad.h>
 
 static uint32_t BufferTypeToGL(BufferType type);

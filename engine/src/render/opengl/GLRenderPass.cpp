@@ -4,7 +4,7 @@
 // Tells where to render to for opengl
 //-------------------------------------
 
-#include "engine/render_system/opengl/GLRenderPass.h"
+#include "engine/render/opengl/GLRenderPass.h"
 #include <glad/glad.h>
 #include <cstdio>
 

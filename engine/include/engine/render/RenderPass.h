@@ -8,7 +8,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include <memory>
-#include "engine/render_system/GPUTexture.h"
+#include "engine/render/GPUTexture.h"
 
 enum class LoadOp {
     Clear,    // clear to clear value on begin

@@ -5,7 +5,7 @@
 //-------------------------------------
 
 #pragma once
-#include "engine/render_system/GPUShader.h"
+#include "engine/render/GPUShader.h"
 
 class GLShader : public GPUShader {
 public:

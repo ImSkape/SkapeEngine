@@ -7,11 +7,11 @@
 #pragma once
 #include <memory>
 #include <string>
-#include "engine/render_system/GPUBuffer.h"
-#include "engine/render_system/GPUShader.h"
-#include "engine/render_system/GPUTexture.h"
-#include "engine/render_system/RenderPass.h"
-#include "engine/render_system/CommandBuffer.h"
+#include "engine/render/GPUBuffer.h"
+#include "engine/render/GPUShader.h"
+#include "engine/render/GPUTexture.h"
+#include "engine/render/RenderPass.h"
+#include "engine/render/CommandBuffer.h"
 #include "engine/core/SEResult.h"
 
 struct GLFWwindow;

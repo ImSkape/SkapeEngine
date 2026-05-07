@@ -4,7 +4,7 @@
 // opengl shader
 //-------------------------------------
 
-#include "engine/render_system/opengl/GLShader.h"
+#include "engine/render/opengl/GLShader.h"
 #include <glad/glad.h>
 #include <cstdio>
 

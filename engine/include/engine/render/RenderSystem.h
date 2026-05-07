@@ -6,7 +6,7 @@
 
 #pragma once
 #include <memory>
-#include "engine/render_system/GFXContext.h"
+#include "engine/render/GFXContext.h"
 #include "engine/core/SEResult.h"
 
 struct GLFWwindow;

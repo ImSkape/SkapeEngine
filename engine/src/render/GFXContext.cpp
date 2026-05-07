@@ -4,13 +4,13 @@
 // Sets and handles the GFX context, backend vs. frontend
 //-------------------------------------
 
-#include "engine/render_system/GFXContext.h"
+#include "engine/render/GFXContext.h"
 
 #ifdef GFX_OPENGL
-#include "engine/render_system/opengl/GLContext.h"
+#include "engine/render/opengl/GLContext.h"
 #endif
 #ifdef GFX_VULKAN
-#include "engine/render_system/vulkan/VKContext.h"
+#include "engine/render/vulkan/VKContext.h"
 #endif
 
 std::unique_ptr<GFXContext> GFXContext::Create() {

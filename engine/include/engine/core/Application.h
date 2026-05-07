@@ -6,13 +6,13 @@
 
 #pragma once
 #include "engine/platform/Window.h"
-#include "engine/render_system/RenderSystem.h"
+#include "engine/render/RenderSystem.h"
 #include <memory>
 
-#include "engine/render_system/GPUBuffer.h"
-#include "engine/render_system/GPUShader.h"
-#include "engine/render_system/CommandBuffer.h"
-#include "engine/render_system/RenderPass.h"
+#include "engine/render/GPUBuffer.h"
+#include "engine/render/GPUShader.h"
+#include "engine/render/CommandBuffer.h"
+#include "engine/render/RenderPass.h"
 
 class Application {
 public:

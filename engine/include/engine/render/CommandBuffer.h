@@ -7,10 +7,10 @@
 #pragma once
 #include <memory>
 #include <glm/glm.hpp>
-#include "engine/render_system/GPUBuffer.h"
-#include "engine/render_system/GPUShader.h"
-#include "engine/render_system/GPUTexture.h"
-#include "engine/render_system/RenderPass.h"
+#include "engine/render/GPUBuffer.h"
+#include "engine/render/GPUShader.h"
+#include "engine/render/GPUTexture.h"
+#include "engine/render/RenderPass.h"
 
 // how vertices are assembled into primitives
 enum class PrimitiveTopology {

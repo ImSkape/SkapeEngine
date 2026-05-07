@@ -4,10 +4,10 @@
 // OpenGL implementation from graphics API
 //-------------------------------------
 
-#include "engine/render_system/opengl/GLCommandBuffer.h"
-#include "engine/render_system/opengl/GLBuffer.h"
-#include "engine/render_system/opengl/GLTexture.h"
-#include "engine/render_system/opengl/GLRenderPass.h"
+#include "engine/render/opengl/GLCommandBuffer.h"
+#include "engine/render/opengl/GLBuffer.h"
+#include "engine/render/opengl/GLTexture.h"
+#include "engine/render/opengl/GLRenderPass.h"
 #include <glad/glad.h>
 
 static uint32_t TopologyToGL(PrimitiveTopology t);

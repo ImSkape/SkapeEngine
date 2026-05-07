@@ -11,7 +11,7 @@
 //       glfwGetTime() moves to platform Time abstraction
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
-#include "engine/render_system/RenderSystem.h"
+#include "engine/render/RenderSystem.h"
 #include <cstdio>
 #include <memory>
 
