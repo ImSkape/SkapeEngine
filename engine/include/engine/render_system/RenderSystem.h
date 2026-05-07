@@ -6,7 +6,7 @@
 
 #pragma once
 #include <memory>
-#include "engine/renderer/GFXContext.h"
+#include "engine/render_system/GFXContext.h"
 #include "engine/core/SEResult.h"
 
 struct GLFWwindow;
@@ -21,7 +21,7 @@ public:
     // access to context for creating GPU objects
     GFXContext& GetContext() { return *m_context; }
 
-    // convenience — submit a command buffer
+    // convenience ï¿½ submit a command buffer
     void Submit(CommandBuffer& cmd);
 
 private:

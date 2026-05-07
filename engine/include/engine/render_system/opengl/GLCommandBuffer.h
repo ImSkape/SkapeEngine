@@ -5,7 +5,7 @@
 //-------------------------------------
 
 #pragma once
-#include "engine/renderer/CommandBuffer.h"
+#include "engine/render_system/CommandBuffer.h"
 
 class GLCommandBuffer : public CommandBuffer {
 public:

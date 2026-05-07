@@ -4,13 +4,13 @@
 // Sets and handles the GFX context, backend vs. frontend
 //-------------------------------------
 
-#include "engine/renderer/GFXContext.h"
+#include "engine/render_system/GFXContext.h"
 
 #ifdef GFX_OPENGL
-#include "engine/renderer/opengl/GLContext.h"
+#include "engine/render_system/opengl/GLContext.h"
 #endif
 #ifdef GFX_VULKAN
-#include "engine/renderer/vulkan/VKContext.h"
+#include "engine/render_system/vulkan/VKContext.h"
 #endif
 
 std::unique_ptr<GFXContext> GFXContext::Create() {
@@ -19,7 +19,7 @@ std::unique_ptr<GFXContext> GFXContext::Create() {
 #elif defined(GFX_VULKAN)
     return std::make_unique<VKContext>();
 #else
-    static_assert(false, "No GFX backend defined — set GFX_OPENGL or GFX_VULKAN in CMake");
+    static_assert(false, "No GFX backend defined ï¿½ set GFX_OPENGL or GFX_VULKAN in CMake");
     return nullptr;
 #endif
 }

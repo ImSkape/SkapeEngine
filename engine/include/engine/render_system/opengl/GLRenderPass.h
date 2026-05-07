@@ -5,7 +5,7 @@
 //-------------------------------------
 
 #pragma once
-#include "engine/renderer/RenderPass.h"
+#include "engine/render_system/RenderPass.h"
 
 class GLRenderPass : public RenderPass {
 public:

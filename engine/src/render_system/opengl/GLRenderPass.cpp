@@ -4,7 +4,7 @@
 // Tells where to render to for opengl
 //-------------------------------------
 
-#include "engine/renderer/opengl/GLRenderPass.h"
+#include "engine/render_system/opengl/GLRenderPass.h"
 #include <glad/glad.h>
 #include <cstdio>
 
@@ -15,9 +15,9 @@ GLRenderPass::GLRenderPass(const RenderPassSpec& spec) {
     if (spec.width == 0 || spec.height == 0) {
         m_isDefault = true;
         m_fbo = 0;
-        return;  // nothing else needed — FBO 0 is provided by OpenGL
+        return;  // nothing else needed ï¿½ FBO 0 is provided by OpenGL
     }
-    // offscreen — create our own FBO
+    // offscreen ï¿½ create our own FBO
     glGenFramebuffers(1, &m_fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
 

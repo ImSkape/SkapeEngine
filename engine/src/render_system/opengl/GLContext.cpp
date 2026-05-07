@@ -4,11 +4,11 @@
 //
 //-------------------------------------
 
-#include "engine/renderer/opengl/GLContext.h"
-#include "engine/renderer/opengl/GLBuffer.h"
-#include "engine/renderer/opengl/GLShader.h"
-#include "engine/renderer/opengl/GLRenderPass.h"
-#include "engine/renderer/opengl/GLCommandBuffer.h"
+#include "engine/render_system/opengl/GLContext.h"
+#include "engine/render_system/opengl/GLBuffer.h"
+#include "engine/render_system/opengl/GLShader.h"
+#include "engine/render_system/opengl/GLRenderPass.h"
+#include "engine/render_system/opengl/GLCommandBuffer.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <cstdio>
@@ -35,12 +35,12 @@ void GLContext::Present() {
 }
 
 void GLContext::Submit(CommandBuffer& cmd) {
-    // no-op for OpenGL — commands execute immediately when called
+    // no-op for OpenGL ï¿½ commands execute immediately when called
     // this is where real work happens in Vulkan
     (void)cmd;
 }
 
-// stubs for now — implement each when you get to that object
+// stubs for now ï¿½ implement each when you get to that object
 std::unique_ptr<GPUBuffer> GLContext::CreateBuffer(
     BufferType type, BufferUsage usage, uint32_t size) {
     return std::make_unique<GLBuffer>(type, usage, size);

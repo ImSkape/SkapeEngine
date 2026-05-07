@@ -4,10 +4,10 @@
 // OpenGL implementation from graphics API
 //-------------------------------------
 
-#include "engine/renderer/opengl/GLCommandBuffer.h"
-#include "engine/renderer/opengl/GLBuffer.h"
-#include "engine/renderer/opengl/GLTexture.h"
-#include "engine/renderer/opengl/GLRenderPass.h"
+#include "engine/render_system/opengl/GLCommandBuffer.h"
+#include "engine/render_system/opengl/GLBuffer.h"
+#include "engine/render_system/opengl/GLTexture.h"
+#include "engine/render_system/opengl/GLRenderPass.h"
 #include <glad/glad.h>
 
 static uint32_t TopologyToGL(PrimitiveTopology t);
@@ -30,7 +30,7 @@ void GLCommandBuffer::End() {
 }
 
 void GLCommandBuffer::Reset() {
-    // nothing to clear yet — more state gets added here later
+    // nothing to clear yet ï¿½ more state gets added here later
 }
 
 
@@ -93,17 +93,17 @@ void GLCommandBuffer::DrawIndexed(uint32_t indexCount,
 void GLCommandBuffer::SetupVertexAttributes() {
     uint32_t stride = (3 + 3 + 2) * sizeof(float);
 
-    // location 0 — position — 3 floats at offset 0
+    // location 0 ï¿½ position ï¿½ 3 floats at offset 0
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride,
         (void*)0);
 
-    // location 1 — normal — 3 floats at offset 12 bytes
+    // location 1 ï¿½ normal ï¿½ 3 floats at offset 12 bytes
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride,
         (void*)(3 * sizeof(float)));
 
-    // location 2 — uv — 2 floats at offset 24 bytes
+    // location 2 ï¿½ uv ï¿½ 2 floats at offset 24 bytes
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride,
         (void*)(6 * sizeof(float)));

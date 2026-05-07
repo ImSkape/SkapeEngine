@@ -7,11 +7,11 @@
 #include "engine/platform/glfw/WindowGlfw.h"
 #include "engine/core/SEResult.h"
 #include "engine/core/ServiceLocator.h"
-// TODO: remove — glClear moves to Renderer::BeginFrame(), 
+// TODO: remove ï¿½ glClear moves to Renderer::BeginFrame(), 
 //       glfwGetTime() moves to platform Time abstraction
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
-#include "engine/renderer/Renderer.h"
+#include "engine/render_system/RenderSystem.h"
 #include <cstdio>
 #include <memory>
 
@@ -62,7 +62,7 @@ void Application::Run(const std::string& projectPath)
         }
 
         // UPDATE
-        // input, camera, game logic — variable timestep
+        // input, camera, game logic ï¿½ variable timestep
         Update(dt);
 
         //  LATE UPDATE
@@ -81,7 +81,7 @@ void Application::Run(const std::string& projectPath)
     // save state, flush anything in flight
     PreShutdown();
 
-    // engine systems tear down — logging flush etc
+    // engine systems tear down ï¿½ logging flush etc
     Shutdown();
 
     //Anything left hanging
@@ -104,7 +104,7 @@ void Application::RunHeadless(const std::string& projectPath, int frames)
         FixedUpdate(fixedTimestep);
         Update(fixedTimestep);
         LateUpdate(fixedTimestep);
-        // no render — no window or GPU context in headless
+        // no render ï¿½ no window or GPU context in headless
     }
 
     PreShutdown();
@@ -193,7 +193,7 @@ void Application::Init()
 
         m_cmd = ctx.CreateCommandBuffer();
 
-        // create main render pass — width/height 0 = render to window
+        // create main render pass ï¿½ width/height 0 = render to window
         RenderPassSpec passSpec;
         passSpec.width = 0;
         passSpec.height = 0;

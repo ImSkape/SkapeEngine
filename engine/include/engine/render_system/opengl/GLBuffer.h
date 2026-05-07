@@ -5,7 +5,7 @@
 //-------------------------------------
 
 #pragma once
-#include "engine/renderer/GPUBuffer.h"
+#include "engine/render_system/GPUBuffer.h"
 
 class GLBuffer : public GPUBuffer {
 public:

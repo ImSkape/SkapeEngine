@@ -6,13 +6,13 @@
 
 #pragma once
 #include "engine/platform/Window.h"
-#include "engine/renderer/Renderer.h"
+#include "engine/render_system/RenderSystem.h"
 #include <memory>
 
-#include "engine/renderer/GPUBuffer.h"
-#include "engine/renderer/GPUShader.h"
-#include "engine/renderer/CommandBuffer.h"
-#include "engine/renderer/RenderPass.h"
+#include "engine/render_system/GPUBuffer.h"
+#include "engine/render_system/GPUShader.h"
+#include "engine/render_system/CommandBuffer.h"
+#include "engine/render_system/RenderPass.h"
 
 class Application {
 public:
@@ -83,7 +83,7 @@ private:
 
     bool m_headless = false;
 
-    // temporary triangle test — remove when scene system exists
+    // temporary triangle test ï¿½ remove when scene system exists
     std::unique_ptr<GPUBuffer>     m_triangleVBO;
     std::unique_ptr<GPUShader>     m_triangleShader;
     std::unique_ptr<CommandBuffer> m_cmd;

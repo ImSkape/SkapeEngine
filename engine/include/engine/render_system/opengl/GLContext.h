@@ -5,7 +5,7 @@
 //-------------------------------------
 
 #pragma once
-#include "engine/renderer/GFXContext.h"
+#include "engine/render_system/GFXContext.h"
 
 struct GLFWwindow;
 

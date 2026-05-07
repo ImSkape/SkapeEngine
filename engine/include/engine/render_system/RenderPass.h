@@ -8,17 +8,17 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include <memory>
-#include "engine/renderer/GPUTexture.h"
+#include "engine/render_system/GPUTexture.h"
 
 enum class LoadOp {
     Clear,    // clear to clear value on begin
     Load,     // preserve existing contents
-    DontCare  // don't care — fastest
+    DontCare  // don't care ï¿½ fastest
 };
 
 enum class StoreOp {
     Store,    // write results out
-    DontCare  // discard — fastest for depth/stencil
+    DontCare  // discard ï¿½ fastest for depth/stencil
 };
 
 struct AttachmentSpec {
