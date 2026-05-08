@@ -9,6 +9,9 @@
 #include <cstdio>
 #include <cassert>
 #include <cstring>
+#if defined(PLATFORM_WINDOWS)
+#include <malloc.h>
+#endif
 
 
 StackAllocator::~StackAllocator() {
@@ -18,7 +21,14 @@ StackAllocator::~StackAllocator() {
 
 void StackAllocator::Init(size_t sizeBytes) {
     assert(m_memory == nullptr && "StackAllocator already initialized");
-    m_memory = static_cast<uint8_t*>(malloc(sizeBytes));
+    // round up to multiple of 64 — required by aligned_alloc on Linux,
+    // good practice everywhere for cache line alignment
+    size_t alignedSize = (sizeBytes + 63) & ~63;
+#if defined(PLATFORM_WINDOWS)
+    m_memory = static_cast<uint8_t*>(_aligned_malloc(alignedSize, 64));
+#else
+    m_memory = static_cast<uint8_t*>(aligned_alloc(64, alignedSize));
+#endif   
     assert(m_memory != nullptr && "StackAllocator failed to allocate memory");
     m_size = sizeBytes;
     m_offset = 0;
@@ -26,7 +36,11 @@ void StackAllocator::Init(size_t sizeBytes) {
 
 void StackAllocator::Shutdown() {
     if (m_memory) {
+#if defined(PLATFORM_WINDOWS)
+        _aligned_free(m_memory);
+#else
         free(m_memory);
+#endif
         m_memory = nullptr;
     }
     m_size = 0;

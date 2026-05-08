@@ -26,7 +26,8 @@ void ArenaAllocator::Init(size_t sizeBytes) {
     m_memory = static_cast<uint8_t*>(_aligned_malloc(alignedSize, 64));
 #else
     m_memory = static_cast<uint8_t*>(aligned_alloc(64, alignedSize));
-#endif    assert(m_memory != nullptr && "ArenaAllocator failed to allocate memory");
+#endif    
+    assert(m_memory != nullptr && "ArenaAllocator failed to allocate memory");
     m_size = sizeBytes;
     m_offset = 0;
 }
