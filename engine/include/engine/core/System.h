@@ -5,6 +5,7 @@
 //-------------------------------------
 
 #pragma once
+#include "engine/core/SECore.h"
 #include "engine/core/SEResult.h"
 #include <string>
 
@@ -14,7 +15,7 @@ public:
 
     virtual SEResult Init()     { return SEResult::ok(); }
     virtual void     Shutdown() {}
-    virtual void     Update(float dt) {}
+    virtual void     Update(float dt) { UNREFERENCED_PARAMETER(dt); }
 
     // name for debugging, logging, profiler display
     virtual const std::string& GetName() const = 0;

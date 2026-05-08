@@ -3,6 +3,7 @@
 // Caleb Davis
 // Main game loop for engine
 //-------------------------------------
+#include "engine/core/SECore.h"
 #include "engine/core/Application.h"
 #include "engine/platform/glfw/WindowGlfw.h"
 #include "engine/core/SEResult.h"
@@ -20,6 +21,7 @@ Application::Application()
 
 void Application::Run(const std::string& projectPath)
 {
+    (void)projectPath;
     InitEngine();
 
     // before anything starts - config, settings overrides
@@ -227,10 +229,12 @@ void Application::Update(float dt)
 
 void Application::FixedUpdate(float dt)
 {
+    UNREFERENCED_PARAMETER(dt);
 }
 
 void Application::LateUpdate(float dt)
 {
+    UNREFERENCED_PARAMETER(dt);
 }
 
 void Application::Render()

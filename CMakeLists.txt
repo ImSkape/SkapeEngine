@@ -50,9 +50,10 @@ else()
 endif()
 
 
-if(MSVC)
-    target_compile_options(Engine PRIVATE /W4)
-else()
-    target_compile_options(Engine PRIVATE -Wall -Wextra -Wpedantic)
+if(WIN32)
+    target_compile_definitions(Engine PUBLIC PLATFORM_WINDOWS)
+elseif(APPLE AND NOT IOS)
+    target_compile_definitions(Engine PUBLIC PLATFORM_MAC)
+elseif(UNIX AND NOT APPLE AND NOT ANDROID)
+    target_compile_definitions(Engine PUBLIC PLATFORM_LINUX)
 endif()
-

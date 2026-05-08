@@ -5,7 +5,7 @@
 //-------------------------------------
 #pragma once
 #include <string>
-class SEResult;
+struct SEResult;
 
 /// <summary>
 /// Pure virtual API for window events. 

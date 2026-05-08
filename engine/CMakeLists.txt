@@ -1,13 +1,8 @@
 # engine/CMakeLists.txt
 
 
-
-
-
-
-
-# Tell cmake all the files to include
-add_library(Engine STATIC
+set(ENGINE_HEADERS 
+include/engine/core/SECore.h
 include/engine/core/Application.h
 include/engine/core/ServiceLocator.h
 include/engine/core/SEResult.h
@@ -19,7 +14,6 @@ include/engine/core/memory/StackAllocator.h
 include/engine/core/memory/ArenaAllocator.h
 include/engine/platform/Window.h
 include/engine/platform/glfw/WindowGlfw.h
-
 include/engine/render/CommandBuffer.h
 include/engine/render/GFXContext.h
 include/engine/render/GPUBuffer.h
@@ -34,6 +28,10 @@ include/engine/render/opengl/GLRenderPass.h
 include/engine/render/opengl/GLBuffer.h
 include/engine/render/opengl/GLShader.h
 include/engine/render/opengl/GLTexture.h
+)
+
+
+set(ENGINE_SOURCES
 src/core/Application.cpp
 src/core/ServiceLocator.cpp
 src/core/WindowSystem.cpp
@@ -51,14 +49,45 @@ src/render/opengl/GLPipeline.cpp
 src/render/opengl/GLRenderPass.cpp
 src/render/opengl/GLShader.cpp
 src/render/opengl/GLTexture.cpp
+)
 
+set(ENGINE_VENDOR
     ${CMAKE_SOURCE_DIR}/vendors/glad/src/glad.c
 )
+
+# Tell cmake all the files to include
+add_library(Engine STATIC 
+    ${ENGINE_HEADERS} 
+    ${ENGINE_SOURCES} 
+    ${ENGINE_VENDOR}
+)
+set_source_files_properties(${ENGINE_HEADERS} PROPERTIES HEADER_FILE_ONLY TRUE)
+
+
+if(MSVC)
+    target_compile_options(Engine PRIVATE /W4)
+else()
+    target_compile_options(Engine PRIVATE -Wall -Wextra -Wpedantic)
+endif()
+
+# generate VS filters matching folder structure
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/include"
+    PREFIX "Header Files"
+    FILES ${ENGINE_HEADERS})
+
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/src"
+    PREFIX "Source Files"
+    FILES ${ENGINE_SOURCES})
+
+source_group("Vendor" FILES ${ENGINE_VENDOR})
 
 # Debug vs. Release defines that can be used in code
 target_compile_definitions(Engine PUBLIC
     $<$<CONFIG:Debug>:ENGINE_DEBUG>
     $<$<CONFIG:Release>:ENGINE_RELEASE>
+)
+target_precompile_headers(Engine PRIVATE
+    "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/include/engine/core/SECore.h>"
 )
 
 # Link vendor libs
@@ -72,23 +101,6 @@ target_include_directories(Engine PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/vendors/glad/include
 )
-
-
-
-# platform defines
-if(WIN32)
-    target_compile_definitions(Engine PUBLIC PLATFORM_WINDOWS)
-elseif(APPLE AND NOT IOS)
-    target_compile_definitions(Engine PUBLIC PLATFORM_MAC)
-elseif(UNIX AND NOT APPLE AND NOT ANDROID)
-    target_compile_definitions(Engine PUBLIC PLATFORM_LINUX)
-elseif(ANDROID)
-    target_compile_definitions(Engine PUBLIC PLATFORM_ANDROID)
-elseif(IOS)
-    target_compile_definitions(Engine PUBLIC PLATFORM_IOS)
-endif()
-
-
 
 
 if(APPLE)
