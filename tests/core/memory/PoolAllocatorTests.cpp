@@ -215,7 +215,7 @@ TEST_CASE("PoolAllocator: Different types", "[memory][pool]") {
 
     SECTION("works with large struct") {
         struct BigObject {
-            float data[64] = {};
+            float data[64];
             int   id       = 0;
         };
 

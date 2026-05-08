@@ -35,3 +35,6 @@ include(Catch)
 catch_discover_tests(EngineTests
     PROPERTIES TIMEOUT 10 
 )
+
+# no timeout for legiti slow tests
+set_tests_properties("PoolAllocator: Different types" PROPERTIES TIMEOUT 0)
