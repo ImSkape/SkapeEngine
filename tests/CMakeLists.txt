@@ -11,7 +11,6 @@ FetchContent_MakeAvailable(Catch2)
 
 
 set(TEST_SOURCES
-    TestMain.cpp
     core/memory/ArenaAllocatorTests.cpp
     core/memory/StackAllocatorTests.cpp
     core/memory/PoolAllocatorTests.cpp
@@ -31,7 +30,6 @@ target_link_libraries(EngineTests PRIVATE
 target_compile_definitions(EngineTests PRIVATE ENGINE_DEBUG)
 
 
-# register with CTest so cmake --build then ctest runs them
-include(CTest)
+
 include(Catch)
 catch_discover_tests(EngineTests)

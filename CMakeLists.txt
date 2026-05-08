@@ -3,6 +3,8 @@ project(SkapeEngine)
 
 set(CMAKE_CXX_STANDARD 20)
 
+# register with CTest so cmake --build then ctest runs them
+include(CTest)
 
 
 
