@@ -32,4 +32,6 @@ target_compile_definitions(EngineTests PRIVATE ENGINE_DEBUG)
 
 
 include(Catch)
-catch_discover_tests(EngineTests)
+catch_discover_tests(EngineTests
+    PROPERTIES TIMEOUT 10 
+)
