@@ -1,3 +1,8 @@
+//-----------------------------------
+// PoolAllocatorTests.cpp
+// Caleb Davis
+// Unit tests for PoolAllocator
+//-------------------------------------
 #include <catch2/catch_all.hpp>
 #include "engine/core/memory/PoolAllocator.h"
 

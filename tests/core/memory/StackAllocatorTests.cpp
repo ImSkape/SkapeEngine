@@ -1,3 +1,8 @@
+//-----------------------------------
+// StackAllocatorTests.cpp
+// Caleb Davis
+// Unit tests for StackAllocator
+//-------------------------------------
 #include <catch2/catch_all.hpp>
 #include "engine/core/memory/StackAllocator.h"
 
