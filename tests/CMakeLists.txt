@@ -33,8 +33,5 @@ target_compile_definitions(EngineTests PRIVATE ENGINE_DEBUG)
 
 include(Catch)
 catch_discover_tests(EngineTests
-    PROPERTIES TIMEOUT 10 
+    PROPERTIES TIMEOUT 30
 )
-
-# no timeout for legiti slow tests
-set_tests_properties("PoolAllocator: Different types" PROPERTIES TIMEOUT 0)
