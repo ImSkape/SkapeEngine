@@ -64,6 +64,11 @@ add_library(Engine STATIC
 )
 set_source_files_properties(${ENGINE_HEADERS} PROPERTIES HEADER_FILE_ONLY TRUE)
 
+# suppress warnings on all vendor files
+set_source_files_properties(
+    ${CMAKE_SOURCE_DIR}/vendors/glad/src/glad.c
+    PROPERTIES COMPILE_OPTIONS "-Wno-pedantic;-Wno-unused-parameter"
+)
 
 if(MSVC)
     target_compile_options(Engine PRIVATE /W4)

@@ -21,7 +21,7 @@ Application::Application()
 
 void Application::Run(const std::string& projectPath)
 {
-    (void)projectPath;
+    UNREFERENCED_PARAMETER(projectPath);
     InitEngine();
 
     // before anything starts - config, settings overrides
@@ -94,6 +94,7 @@ void Application::Run(const std::string& projectPath)
 
 void Application::RunHeadless(const std::string& projectPath, int frames)
 {
+    UNREFERENCED_PARAMETER(projectPath);
     m_headless = true;
     InitEngine();
     PreInit();

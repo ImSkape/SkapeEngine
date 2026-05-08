@@ -4,6 +4,7 @@
 // OpenGL implementation from graphics API
 //-------------------------------------
 
+#include "engine/core/SECore.h"
 #include "engine/render/opengl/GLCommandBuffer.h"
 #include "engine/render/opengl/GLBuffer.h"
 #include "engine/render/opengl/GLTexture.h"
@@ -65,6 +66,7 @@ void GLCommandBuffer::SetShader(GPUShader& shader) {
 }
 
 void GLCommandBuffer::BindVertexBuffer(GPUBuffer& buffer, uint32_t slot) {
+    UNREFERENCED_PARAMETER(slot);
     auto& glBuffer = static_cast<GLBuffer&>(buffer);
     glBindBuffer(GL_ARRAY_BUFFER, glBuffer.GetHandle());
     SetupVertexAttributes();

@@ -4,6 +4,7 @@
 //
 //-------------------------------------
 
+#include "engine/core/SECore.h"
 #include "engine/render/opengl/GLContext.h"
 #include "engine/render/opengl/GLBuffer.h"
 #include "engine/render/opengl/GLShader.h"
@@ -63,6 +64,7 @@ std::unique_ptr<CommandBuffer> GLContext::CreateCommandBuffer() {
     return std::make_unique<GLCommandBuffer>();
 }
 std::unique_ptr<GPUTexture> GLContext::CreateTexture(const TextureSpec& spec) {
+    UNREFERENCED_PARAMETER(spec);
     // TODO: implement GLTexture
     return nullptr;
 }
