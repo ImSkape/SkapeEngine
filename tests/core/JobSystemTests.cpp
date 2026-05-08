@@ -229,6 +229,12 @@ TEST_CASE("JobSystem: Concurrent jobs", "[jobs]") {
     }
 
     SECTION("jobs can submit other jobs") {
+
+
+        // requires at least 2 worker threads to avoid deadlock
+        // single core CI runners only have 1 worker - skip
+        if (jobs.GetWorkerCount() < 2) return;
+
         std::atomic<int> counter { 0 };
 
         JobHandle outer = jobs.Submit([&jobs, &counter]() {
