@@ -4,6 +4,7 @@
 // glfw window implementation
 //-------------------------------------
 
+#include "engine/core/SECore.h"
 #include "engine/platform/glfw/WindowGlfw.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -108,6 +109,10 @@ void WindowGlfw::SetupOpenGLDebugCallback()
     glDebugMessageCallback([](GLenum source, GLenum type, GLuint id,
         GLenum severity, GLsizei length,
         const GLchar* message, const void* userParam) {
+            UNREFERENCED_PARAMETER(source);
+            UNREFERENCED_PARAMETER(type);
+            UNREFERENCED_PARAMETER(id);
+            UNREFERENCED_PARAMETER(length);
             if (severity != GL_DEBUG_SEVERITY_NOTIFICATION)
                 printf("[GL] %s\n", message);
             else {

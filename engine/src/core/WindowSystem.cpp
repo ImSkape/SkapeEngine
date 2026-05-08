@@ -4,6 +4,7 @@
 // Handles currect window for each platform
 //-------------------------------------
 
+#include "engine/core/SECore.h"
 #include "engine/core/WindowSystem.h"
 #include "engine/core/SEResult.h"
 #include <cstdio>
@@ -55,6 +56,7 @@ void WindowSystem::Shutdown() {
 }
 
 void WindowSystem::Update(float dt) {
+    UNREFERENCED_PARAMETER(dt);
     if (m_window)
         m_window->PollEvents();
 }

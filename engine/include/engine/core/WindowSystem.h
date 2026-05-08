@@ -26,7 +26,7 @@ public:
 
     void Configure(const WindowConfig& config);
 
-    // presentation — called by GFXContext::Present()
+    // presentation: called by GFXContext::Present()
     void Present();
 
     // queries
@@ -36,7 +36,7 @@ public:
     bool IsFullscreen()const;
     bool IsFocused()   const;
 
-    // native handle — RenderSystem casts to what it needs
+    // native handle: RenderSystem casts to what it needs
     void* GetNativeHandle() const;
 
     const std::string& GetName() const override {

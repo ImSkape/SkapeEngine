@@ -16,7 +16,7 @@ public:
     void Init(size_t sizeBytes);
     void Shutdown();
 
-    // save current top — restore with FreeToMarker
+    // save current top: restore with FreeToMarker
     size_t GetMarker() const { return m_offset; }
 
     // allocate from top

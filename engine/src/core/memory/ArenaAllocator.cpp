@@ -22,11 +22,25 @@ void ArenaAllocator::Init(size_t sizeBytes) {
     // round up to multiple of 64 — required by aligned_alloc on Linux,
     // good practice everywhere for cache line alignment
     size_t alignedSize = (sizeBytes + 63) & ~63;
+
+
 #if defined(PLATFORM_WINDOWS)
     m_memory = static_cast<uint8_t*>(_aligned_malloc(alignedSize, 64));
+#elif defined(PLATFORM_MAC) || defined(PLATFORM_IOS)
+#if __MAC_OS_X_VERSION_MIN_REQUIRED >= 101500
+    m_memory = static_cast<uint8_t*>(aligned_alloc(64, alignedSize));
+#else
+    // fallback for macOS < 10.15 — posix_memalign is available on 10.14
+    void* ptr = nullptr;
+    posix_memalign(&ptr, 64, alignedSize);
+    m_memory = static_cast<uint8_t*>(ptr);
+#endif
 #else
     m_memory = static_cast<uint8_t*>(aligned_alloc(64, alignedSize));
-#endif    
+#endif   
+
+
+
     assert(m_memory != nullptr && "ArenaAllocator failed to allocate memory");
     m_size = sizeBytes;
     m_offset = 0;
