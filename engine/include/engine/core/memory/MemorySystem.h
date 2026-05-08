@@ -1,56 +1,68 @@
 //-----------------------------------
 // MemorySystem.h
 // Caleb Davis
-// 
+// Handles each memory allocator
 //-------------------------------------
 
+// engine/include/engine/core/memory/MemorySystem.h
 #pragma once
+#include "engine/core/System.h"
 #include "engine/core/memory/ArenaAllocator.h"
 #include "engine/core/memory/PoolAllocator.h"
 #include "engine/core/memory/StackAllocator.h"
-#include "engine/core/SEResult.h"
 #include <cstdint>
+#include <string>
 
-//class ArenaAllocator;
-//class StackAllocator;
-//template<typename T>
-//class PoolAllocator;
-//
-//// fixed arena categories — each gets its own pre-sized block
-//enum class MemoryCategory : uint8_t {
-//    Frame,    // per-frame temp data — reset every frame
-//    ECS,      // entity/component chunk storage
-//    Asset,    // asset loading scratch memory
-//    Render,   // render system temp buffers
-//    Audio,    // audio system working memory
-//    General   // everything else
-//};
-//
-//class MemorySystem {
-//public:
-//    SEResult Init();
-//    void     Shutdown();
-//
-//    // get an arena for a specific category
-//    ArenaAllocator& GetArena(MemoryCategory category);
-//
-//    // get a stack allocator for scoped temp memory
-//    StackAllocator& GetStack();
-//
-//    // create a pool — caller owns it, backed by General arena
-//    // T = type to pool, count = max simultaneous allocations
-//    template<typename T>
-//    PoolAllocator<T> CreatePool(uint32_t count);
-//
-//    // reset per-frame arenas — call once at start of each frame
-//    void ResetFrameArenas();
-//
-//    // debug — how much of each arena is used
-//    void PrintStats() const;
-//
-//private:
-//    ArenaAllocator m_arenas[(int)MemoryCategory::General + 1];
-//    StackAllocator m_stack;
-//
-//    bool m_initialized = false;
-//};
+enum class MemoryCategory : uint8_t {
+    Frame,
+    ECS,
+    Asset,
+    Render,
+    Audio,
+    General,
+    Count
+};
+
+
+struct MemoryConfig {
+    size_t frameSize = 4 * 1024 * 1024;  //  4MB — per frame temp data
+    size_t ecsSize = 64 * 1024 * 1024;  // 64MB — entity/component chunks
+    size_t assetSize = 32 * 1024 * 1024;  // 32MB — asset loading scratch
+    size_t renderSize = 16 * 1024 * 1024;  // 16MB — render temp buffers
+    size_t audioSize = 8 * 1024 * 1024;  //  8MB — audio working memory
+    size_t generalSize = 32 * 1024 * 1024;  // 32MB — everything else
+    size_t stackSize = 8 * 1024 * 1024;  //  8MB — scoped temp memory
+};
+
+
+class MemorySystem : public System {
+public:
+    SEResult Init() override;
+    void     Shutdown() override;
+
+
+    void Configure(const MemoryConfig& config);
+
+    ArenaAllocator& GetArena(MemoryCategory category);
+    StackAllocator& GetStack();
+
+    template<typename T>
+    PoolAllocator<T> CreatePool(size_t count) {
+        PoolAllocator<T> pool;
+        pool.Init(count);
+        return pool;
+    }
+
+    void ResetFrameArenas();
+    void PrintStats() const;
+
+    const std::string& GetName() const override {
+        static std::string name = "MemorySystem";
+        return name;
+    }
+
+private:
+    MemoryConfig   m_config;
+    ArenaAllocator m_arenas[(size_t)MemoryCategory::Count];
+    StackAllocator m_stack;
+};

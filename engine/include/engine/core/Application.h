@@ -7,6 +7,7 @@
 #pragma once
 #include "engine/core/WindowSystem.h"
 #include "engine/render/RenderSystem.h"
+#include "engine/core/memory/MemorySystem.h"
 #include <memory>
 #include "engine/render/GPUBuffer.h"
 #include "engine/render/GPUShader.h"
@@ -78,8 +79,7 @@ private:
 private:
 
     std::vector<System*> m_systems;
-
-
+    MemorySystem m_memorySystem;
     WindowSystem m_windowSystem;
     RenderSystem m_renderSystem;
     bool m_running = false;

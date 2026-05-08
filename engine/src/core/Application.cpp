@@ -45,6 +45,8 @@ void Application::Run(const std::string& projectPath)
     // Loop until the user closes the window
     while (m_running && !m_windowSystem.ShouldClose())
     {
+        m_memorySystem.ResetFrameArenas();  // first — wipe last frame's temp data
+
         //  DELTA TIME
         float currentTime = (float)glfwGetTime();
         float dt = currentTime - lastTime;
@@ -99,6 +101,7 @@ void Application::RunHeadless(const std::string& projectPath, int frames)
     PostInit();
     float fixedTimestep = 1.0f / 60.0f;
     for (int i = 0; i < frames; i++) {
+        m_memorySystem.ResetFrameArenas();
         FixedUpdate(fixedTimestep);
         Update(fixedTimestep);
         LateUpdate(fixedTimestep);
@@ -116,6 +119,18 @@ void Application::RunHeadless(const std::string& projectPath, int frames)
 
 void Application::InitEngine()
 {
+
+    MemoryConfig memConfig;  // uses defaults
+    m_memorySystem.Configure(memConfig);
+    RegisterSystem(&m_memorySystem);
+
+
+
+
+
+
+
+
     WindowConfig config;
     config.width = 1280;
     config.height = 720;

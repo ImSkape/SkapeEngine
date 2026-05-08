@@ -36,7 +36,6 @@ src/core/Application.cpp
 src/core/ServiceLocator.cpp
 src/core/WindowSystem.cpp
 src/core/memory/MemorySystem.cpp
-src/core/memory/PoolAllocator.cpp
 src/core/memory/StackAllocator.cpp
 src/core/memory/ArenaAllocator.cpp
 src/platform/glfw/WindowGlfw.cpp
