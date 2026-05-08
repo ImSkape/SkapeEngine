@@ -30,7 +30,7 @@ struct JobHandle {
     std::shared_ptr<std::condition_variable> cv;
 
     bool IsDone() const {
-        return counter && counter->load() == 0;
+        return !counter || counter->load() == 0;
     }
 };
 
