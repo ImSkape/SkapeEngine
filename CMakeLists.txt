@@ -57,3 +57,10 @@ elseif(APPLE AND NOT IOS)
 elseif(UNIX AND NOT APPLE AND NOT ANDROID)
     target_compile_definitions(Engine PUBLIC PLATFORM_LINUX)
 endif()
+
+
+option(BUILD_TESTS "Build unit tests" OFF)
+
+if(BUILD_TESTS)
+    add_subdirectory(tests)
+endif()
