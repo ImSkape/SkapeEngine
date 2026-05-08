@@ -1,0 +1,112 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main, develop, 'feature/*' ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+
+  # -- WINDOWS ------------------------------------
+  test-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
+
+      - name: Cache Catch2
+        uses: actions/cache@v4
+        with:
+          path: build-tests/_deps
+          key: catch2-${{ runner.os }}-v3.4.0
+
+      - name: Configure CMake
+        run: cmake -B build-tests -G "Visual Studio 17 2022" -A x64 -DBUILD_TESTS=ON -DBUILD_EDITOR=OFF
+
+      - name: Build Tests
+        run: cmake --build build-tests --config Debug -- /m
+
+      - name: Run Tests
+        shell: cmd
+        run: ctest --test-dir build-tests --build-config Debug --output-on-failure
+
+  # -- MAC ----------------------------------------
+  test-mac:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
+
+      - name: Cache Catch2
+        uses: actions/cache@v4
+        with:
+          path: build-tests/_deps
+          key: catch2-${{ runner.os }}-v3.4.0
+
+      - name: Configure CMake
+        run: |
+          cmake -B build-tests \
+            -G "Xcode" \
+            -DCMAKE_OSX_DEPLOYMENT_TARGET=10.14 \
+            -DBUILD_TESTS=ON \
+            -DBUILD_EDITOR=OFF
+
+      - name: Build Tests
+        run: cmake --build build-tests --config Debug
+
+      - name: Run Tests
+        run: ctest --test-dir build-tests --build-config Debug --output-on-failure
+
+  # -- LINUX --------------------------------------
+  test-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+        with:
+          submodules: recursive
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            cmake \
+            ninja-build \
+            libgl1-mesa-dev \
+            libglu1-mesa-dev \
+            libx11-dev \
+            libxrandr-dev \
+            libxinerama-dev \
+            libxcursor-dev \
+            libxi-dev \
+            libwayland-dev \
+            wayland-protocols \
+            libxkbcommon-dev \
+            pkg-config
+
+      - name: Cache Catch2
+        uses: actions/cache@v4
+        with:
+          path: build-tests/_deps
+          key: catch2-${{ runner.os }}-v3.4.0
+
+      - name: Configure CMake
+        run: |
+          cmake -B build-tests -G "Ninja" \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DBUILD_TESTS=ON \
+            -DBUILD_EDITOR=OFF
+
+      - name: Build Tests
+        run: cmake --build build-tests
+
+      - name: Run Tests
+        run: ctest --test-dir build-tests --output-on-failure
