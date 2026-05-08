@@ -9,8 +9,9 @@
 #include "engine/render/opengl/GLShader.h"
 #include "engine/render/opengl/GLRenderPass.h"
 #include "engine/render/opengl/GLCommandBuffer.h"
+#include "engine/core/ServiceLocator.h"
+#include "engine/core/WindowSystem.h"
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <cstdio>
 #include <memory>
 
@@ -31,7 +32,9 @@ void GLContext::Shutdown() {
 }
 
 void GLContext::Present() {
-    glfwSwapBuffers(m_window);
+    auto* windowSystem = ServiceLocator::Get<WindowSystem>();
+    ENGINE_ASSERT(windowSystem != nullptr, "WindowSystem not registered");
+    windowSystem->Present();
 }
 
 void GLContext::Submit(CommandBuffer& cmd) {

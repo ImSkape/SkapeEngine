@@ -27,16 +27,16 @@ SEResult WindowGlfw::Init(int width, int height, const std::string& title)
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);  // required on Mac
 
     //Create the window
-    window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
+    m_window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
 
     //Window handle
-    if (!window) {
+    if (!m_window) {
         glfwTerminate();
         return SEResult::fail("GLFW window failed to be created");
     }
 
     //Make the window's context current 
-    glfwMakeContextCurrent(window);
+    glfwMakeContextCurrent(m_window);
 
     //Load in GLAD
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -57,12 +57,12 @@ void WindowGlfw::PollEvents()
 
 bool WindowGlfw::ShouldClose()
 {
-	return glfwWindowShouldClose(window);
+	return glfwWindowShouldClose(m_window);
 }
 
 void WindowGlfw::SwapBuffers()
 {
-    glfwSwapBuffers(window);
+    glfwSwapBuffers(m_window);
 }
 
 void WindowGlfw::Shutdown()
@@ -70,10 +70,32 @@ void WindowGlfw::Shutdown()
     glfwTerminate();
 }
 
+
 GLFWwindow* WindowGlfw::GetGLFWWindow()
 {
-    return window;
+    return m_window;
 }
+
+int WindowGlfw::GetWidth() {
+    int width, height;
+    glfwGetWindowSize(m_window, &width, &height);
+    return width;
+}
+
+int WindowGlfw::GetHeight() {
+    int width, height;
+    glfwGetWindowSize(m_window, &width, &height);
+    return height;
+}
+
+bool WindowGlfw::IsFocused() {
+    return glfwGetWindowAttrib(m_window, GLFW_FOCUSED);
+}
+
+void* WindowGlfw::GetNativeHandle() {
+    return static_cast<void*>(m_window);
+}
+
 
 
 void WindowGlfw::SetupOpenGLDebugCallback()

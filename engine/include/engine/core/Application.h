@@ -5,15 +5,14 @@
 //-------------------------------------
 
 #pragma once
-#include "engine/platform/Window.h"
+#include "engine/core/WindowSystem.h"
 #include "engine/render/RenderSystem.h"
 #include <memory>
-
 #include "engine/render/GPUBuffer.h"
 #include "engine/render/GPUShader.h"
 #include "engine/render/CommandBuffer.h"
 #include "engine/render/RenderPass.h"
-
+#include "engine/core/ServiceLocator.h"
 class Application {
 public:
     Application();
@@ -77,8 +76,12 @@ private:
     // logging, telemetry flush
 
 private:
-    std::unique_ptr<Window> m_window;
-    Renderer m_renderer;
+
+    std::vector<System*> m_systems;
+
+
+    WindowSystem m_windowSystem;
+    RenderSystem m_renderSystem;
     bool m_running = false;
 
     bool m_headless = false;
@@ -88,5 +91,20 @@ private:
     std::unique_ptr<GPUShader>     m_triangleShader;
     std::unique_ptr<CommandBuffer> m_cmd;
     std::unique_ptr<RenderPass>    m_mainPass;
+
+
+    template<typename T>
+    void RegisterSystem(T* system) {
+        SEResult result = system->Init();
+        if (!result) {
+            printf("[Fatal] %s failed: %s\n",
+                system->GetName().c_str(),
+                result.message.c_str());
+            return;
+        }
+        ServiceLocator::Register<T>(system);
+        m_systems.push_back(system);
+    }
+
 
 };

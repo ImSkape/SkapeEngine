@@ -11,13 +11,11 @@
 //       glfwGetTime() moves to platform Time abstraction
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
-#include "engine/render/RenderSystem.h"
 #include <cstdio>
 #include <memory>
 
 Application::Application()
 {
-    m_window = std::make_unique<WindowGlfw>();
 }
 
 void Application::Run(const std::string& projectPath)
@@ -36,14 +34,14 @@ void Application::Run(const std::string& projectPath)
     PostInit();
 
 
+    m_running = true;
     // TIMING SETUP
     float fixedTimestep = 1.0f / 60.0f;
     float accumulator = 0.0f;
     float lastTime = (float)glfwGetTime();
 
-    m_running = true;
     // Loop until the user closes the window
-    while (m_running && !m_window->ShouldClose())
+    while (m_running && !m_windowSystem.ShouldClose())
     {
         //  DELTA TIME
         float currentTime = (float)glfwGetTime();
@@ -74,8 +72,6 @@ void Application::Run(const std::string& projectPath)
         #ifdef ENGINE_EDITOR
             ImGuiRender();
         #endif
-        // PRESENT
-            m_window->PollEvents();
     }
 
     // save state, flush anything in flight
@@ -118,32 +114,44 @@ void Application::RunHeadless(const std::string& projectPath, int frames)
 
 void Application::InitEngine()
 {
+    WindowConfig config;
+    config.width = 1280;
+    config.height = 720;
+    config.title = "Skape Engine";
+    config.vsync = true;
+    m_windowSystem.Configure(config);
     if (!m_headless) {
-
-        /* Initialize the library */
-        SEResult result = m_window->Init(1280, 720, "Skape Engine");
-        if (!result) {
-            printf("[Fatal] %s\n", result.message.c_str());
-            return;
-        }
-
-
-        SEResult rendererResult = m_renderer.Init(static_cast<WindowGlfw*>(m_window.get())->GetGLFWWindow());
-        if (!rendererResult) {
-            printf("[Fatal] %s\n", rendererResult.message.c_str());
-            return;
-        }
+        RegisterSystem(&m_windowSystem);
+        RegisterSystem(&m_renderSystem);
     }
-    ServiceLocator::Register<Renderer>(&m_renderer);
+
+
+    //if (!m_headless) {
+
+    //    /* Initialize the library */
+    //    SEResult result = m_window->Init(1280, 720, "Skape Engine");
+    //    if (!result) {
+    //        printf("[Fatal] %s\n", result.message.c_str());
+    //        return;
+    //    }
+
+
+    //    SEResult rendererResult = m_renderer.Init(static_cast<WindowGlfw*>(m_window.get())->GetGLFWWindow());
+    //    if (!rendererResult) {
+    //        printf("[Fatal] %s\n", rendererResult.message.c_str());
+    //        return;
+    //    }
+    //}
+    //ServiceLocator::Register<RenderSystem>(&m_renderer);
 
 }
 
 void Application::ShutdownEngine()
 {
-    if (!m_headless) {
-        m_renderer.Shutdown();
-        m_window->Shutdown();
-    }
+    for (auto it = m_systems.rbegin(); it != m_systems.rend(); ++it)
+        (*it)->Shutdown();
+    m_systems.clear();
+    ServiceLocator::Clear();
 }
 
 void Application::PreInit()
@@ -161,7 +169,7 @@ void Application::Init()
              0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f,  0.5f, 1.0f,  // top middle
         };
 
-        auto& ctx = m_renderer.GetContext();
+        auto& ctx = m_renderSystem.GetContext();
         m_triangleVBO = ctx.CreateBuffer(
             BufferType::Vertex,
             BufferUsage::Static,
@@ -213,6 +221,8 @@ void Application::PostInit()
 
 void Application::Update(float dt)
 {
+    for (auto* system : m_systems)
+        system->Update(dt);
 }
 
 void Application::FixedUpdate(float dt)
@@ -226,7 +236,7 @@ void Application::LateUpdate(float dt)
 void Application::Render()
 {
     if (m_headless) return;
-    m_renderer.BeginFrame();
+    m_renderSystem.BeginFrame();
     // scene rendering goes here later
 
 
@@ -239,9 +249,9 @@ void Application::Render()
     m_cmd->EndRenderPass();
     m_cmd->End();
 
-    m_renderer.Submit(*m_cmd);
+    m_renderSystem.Submit(*m_cmd);
 
-    m_renderer.EndFrame();
+    m_renderSystem.EndFrame();
 }
 
 

@@ -1,12 +1,25 @@
 # engine/CMakeLists.txt
 
 
+
+
+
+
+
 # Tell cmake all the files to include
 add_library(Engine STATIC
 include/engine/core/Application.h
 include/engine/core/ServiceLocator.h
 include/engine/core/SEResult.h
+include/engine/core/System.h
+include/engine/core/WindowSystem.h
+include/engine/core/memory/MemorySystem.h
+include/engine/core/memory/PoolAllocator.h
+include/engine/core/memory/StackAllocator.h
+include/engine/core/memory/ArenaAllocator.h
 include/engine/platform/Window.h
+include/engine/platform/glfw/WindowGlfw.h
+
 include/engine/render/CommandBuffer.h
 include/engine/render/GFXContext.h
 include/engine/render/GPUBuffer.h
@@ -23,7 +36,11 @@ include/engine/render/opengl/GLShader.h
 include/engine/render/opengl/GLTexture.h
 src/core/Application.cpp
 src/core/ServiceLocator.cpp
-src/platform/glfw/WindowGlfw.cpp
+src/core/WindowSystem.cpp
+src/core/memory/MemorySystem.cpp
+src/core/memory/PoolAllocator.cpp
+src/core/memory/StackAllocator.cpp
+src/core/memory/ArenaAllocator.cpp
 src/platform/glfw/WindowGlfw.cpp
 src/render/GFXContext.cpp
 src/render/RenderSystem.cpp
@@ -55,6 +72,24 @@ target_include_directories(Engine PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${CMAKE_SOURCE_DIR}/vendors/glad/include
 )
+
+
+
+# platform defines
+if(WIN32)
+    target_compile_definitions(Engine PUBLIC PLATFORM_WINDOWS)
+elseif(APPLE AND NOT IOS)
+    target_compile_definitions(Engine PUBLIC PLATFORM_MAC)
+elseif(UNIX AND NOT APPLE AND NOT ANDROID)
+    target_compile_definitions(Engine PUBLIC PLATFORM_LINUX)
+elseif(ANDROID)
+    target_compile_definitions(Engine PUBLIC PLATFORM_ANDROID)
+elseif(IOS)
+    target_compile_definitions(Engine PUBLIC PLATFORM_IOS)
+endif()
+
+
+
 
 if(APPLE)
     target_compile_definitions(Engine PUBLIC GL_SILENCE_DEPRECATION)

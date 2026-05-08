@@ -19,4 +19,8 @@ public:
     virtual bool ShouldClose() = 0;
     virtual void SwapBuffers() = 0;
     virtual void Shutdown() = 0;
+    virtual int GetWidth() = 0;
+    virtual int GetHeight() = 0;
+    virtual bool IsFocused() = 0;
+    virtual void* GetNativeHandle() = 0;
 };

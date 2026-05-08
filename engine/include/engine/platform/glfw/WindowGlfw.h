@@ -16,9 +16,13 @@ public:
     bool ShouldClose() override;
     void SwapBuffers() override;
     void Shutdown() override;
+    int GetWidth() override;
+    int GetHeight() override;
+    bool  IsFocused() override;
+    void* GetNativeHandle() override;
     GLFWwindow* GetGLFWWindow();
 
 private:
-    GLFWwindow* window = nullptr;
+    GLFWwindow* m_window = nullptr;
     void SetupOpenGLDebugCallback();
 };

@@ -1,28 +1,33 @@
 //-----------------------------------
-// Renderer.h
+// RenderSystem.h
 // Caleb Davis
 // stub
 //-------------------------------------
 
 #pragma once
 #include <memory>
+#include <string>
+#include "engine/core/System.h"
 #include "engine/render/GFXContext.h"
+#include "engine/render/CommandBuffer.h"
 #include "engine/core/SEResult.h"
 
 struct GLFWwindow;
 
-class Renderer {
+class RenderSystem : public System {
 public:
-    SEResult Init(GLFWwindow* window);
-    void     Shutdown();
-    void     BeginFrame();  // glClear moves here from Application
-    void     EndFrame();    // calls Present()
+    SEResult Init() override;
+    void     Shutdown() override;
+    void     BeginFrame();
+    void     EndFrame();
 
-    // access to context for creating GPU objects
     GFXContext& GetContext() { return *m_context; }
-
-    // convenience � submit a command buffer
     void Submit(CommandBuffer& cmd);
+
+    const std::string& GetName() const override {
+        static std::string name = "RenderSystem";
+        return name;
+    }
 
 private:
     std::unique_ptr<GFXContext>    m_context;
