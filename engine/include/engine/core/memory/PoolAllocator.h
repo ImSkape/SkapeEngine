@@ -16,12 +16,15 @@ public:
 
     void Init(size_t count) {
         m_count = count;
-        m_memory = new uint8_t[sizeof(T) * count];
+        m_slotSize = std::max(sizeof(T), sizeof(FreeNode*));
+
+
+        m_memory = new uint8_t[m_slotSize * count];
 
         // build free list - each free slot points to the next
         m_freeList = nullptr;
         for (size_t i = 0; i < count; i++) {
-            FreeNode* node = reinterpret_cast<FreeNode*>(m_memory + i * sizeof(T));
+            FreeNode* node = reinterpret_cast<FreeNode*>(m_memory + i * m_slotSize);
             node->next = m_freeList;
             m_freeList = node;
         }
@@ -33,6 +36,7 @@ public:
         m_freeList = nullptr;
         m_count = 0;
         m_used = 0;
+        m_slotSize = 0;
     }
 
     T* Alloc() {
@@ -65,5 +69,6 @@ private:
     FreeNode* m_freeList = nullptr;
     size_t    m_count = 0;
     size_t    m_used = 0;
+    size_t m_slotSize = 0;
 };
 
