@@ -205,6 +205,19 @@ TEST_CASE("JobSystem: Concurrent jobs", "[jobs]") {
         REQUIRE(counter.load() == jobCount);
     }
 
+    jobs.Shutdown();
+}
+
+TEST_CASE("JobSystem: Concurrent jobs - multi worker", "[jobs][multi]") {
+    JobSystem jobs;
+    jobs.Init();
+
+    // all tests in this case require multiple workers
+    if (jobs.GetWorkerCount() < 2) {
+        jobs.Shutdown();
+        return;
+    }
+
     SECTION("multiple batches submitted concurrently all complete") {
         std::atomic<int> counter { 0 };
         const int batchCount = 4;
@@ -229,16 +242,9 @@ TEST_CASE("JobSystem: Concurrent jobs", "[jobs]") {
     }
 
     SECTION("jobs can submit other jobs") {
-
-
-        // requires at least 2 worker threads to avoid deadlock
-        // single core CI runners only have 1 worker - skip
-        if (jobs.GetWorkerCount() < 2) return;
-
         std::atomic<int> counter { 0 };
 
         JobHandle outer = jobs.Submit([&jobs, &counter]() {
-            // job submits another job
             JobHandle inner = jobs.Submit([&counter]() {
                 counter.fetch_add(1);
             });

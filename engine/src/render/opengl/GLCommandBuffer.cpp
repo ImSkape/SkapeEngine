@@ -88,6 +88,7 @@ void GLCommandBuffer::Draw(uint32_t vertexCount, uint32_t firstVertex) {
 void GLCommandBuffer::DrawIndexed(uint32_t indexCount,
     uint32_t firstIndex,
     int32_t  vertexOffset) {
+    UNREFERENCED_PARAMETER(vertexOffset);
     glDrawElements(m_glTopology, indexCount, GL_UNSIGNED_INT,
         (void*)(firstIndex * sizeof(uint32_t)));
 }
