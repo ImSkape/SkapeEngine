@@ -26,6 +26,8 @@ using Job = std::function<void()>;
 // use with Wait() to block until jobs complete
 struct JobHandle {
     std::shared_ptr<std::atomic<int>> counter;
+    std::shared_ptr<std::mutex>            mutex;
+    std::shared_ptr<std::condition_variable> cv;
 
     bool IsDone() const {
         return counter && counter->load() == 0;

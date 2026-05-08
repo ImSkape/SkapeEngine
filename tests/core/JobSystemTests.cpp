@@ -157,18 +157,21 @@ TEST_CASE("JobSystem: JobHandle", "[jobs]") {
         REQUIRE(handle.IsDone());
     }
 
-    SECTION("handle with counter zero is done") {
-        JobHandle handle;
-        handle.counter = std::make_shared<std::atomic<int>>(0);
-        REQUIRE(handle.IsDone());
-    }
+SECTION("handle with counter zero is done") {
+    JobHandle handle;
+    handle.counter = std::make_shared<std::atomic<int>>(0);
+    handle.mutex   = std::make_shared<std::mutex>();
+    handle.cv      = std::make_shared<std::condition_variable>();
+    REQUIRE(handle.IsDone());
+}
 
-    SECTION("handle with counter above zero is not done") {
-        JobHandle handle;
-        handle.counter = std::make_shared<std::atomic<int>>(1);
-        REQUIRE_FALSE(handle.IsDone());
-    }
-
+SECTION("handle with counter above zero is not done") {
+    JobHandle handle;
+    handle.counter = std::make_shared<std::atomic<int>>(1);
+    handle.mutex   = std::make_shared<std::mutex>();
+    handle.cv      = std::make_shared<std::condition_variable>();
+    REQUIRE_FALSE(handle.IsDone());
+}
     SECTION("copied handle shares counter") {
         std::atomic<bool> ran { false };
         JobHandle original = jobs.Submit([&ran]() {

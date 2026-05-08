@@ -57,13 +57,20 @@ JobHandle JobSystem::Submit(Job job) {
     // create handle with counter set to 1
     JobHandle handle;
     handle.counter = std::make_shared<std::atomic<int>>(1);
+    handle.mutex = std::make_shared<std::mutex>();
+    handle.cv = std::make_shared<std::condition_variable>();
 
     // capture counter so job decrements it when done
     auto counter = handle.counter;
-    Job wrappedJob = [job = std::move(job), counter]() {
+    auto mutex = handle.mutex;
+    auto cv = handle.cv;
+
+
+    Job wrappedJob = [job = std::move(job), counter, mutex, cv]() {
         job();
-        counter->fetch_sub(1);  // decrement, if hits 0 job is done
-        counter->notify_all();  // wake anyone waiting on this handle
+        counter->fetch_sub(1);
+        std::lock_guard<std::mutex> lock(*mutex);
+        cv->notify_all();
         };
 
     // pick a queue round-robin and push the job
@@ -79,23 +86,30 @@ JobHandle JobSystem::Submit(Job job) {
 
 JobHandle JobSystem::Submit(std::vector<Job> jobs) {
     if (jobs.empty()) {
-        // return an already-done handle
         JobHandle handle;
         handle.counter = std::make_shared<std::atomic<int>>(0);
+        handle.mutex = std::make_shared<std::mutex>();
+        handle.cv = std::make_shared<std::condition_variable>();
         return handle;
     }
 
     // counter starts at number of jobs, decrements as each completes
     JobHandle handle;
     handle.counter = std::make_shared<std::atomic<int>>((int)jobs.size());
+    handle.mutex = std::make_shared<std::mutex>();
+    handle.cv = std::make_shared<std::condition_variable>();
 
     auto counter = handle.counter;
+    auto mutex = handle.mutex;
+    auto cv = handle.cv;
+
 
     for (auto& job : jobs) {
-        Job wrappedJob = [j = std::move(job), counter]() {
+        Job wrappedJob = [j = std::move(job), counter, mutex, cv]() {
             j();
             counter->fetch_sub(1);
-            counter->notify_all();
+            std::lock_guard<std::mutex> lock(*mutex);
+            cv->notify_all();
             };
 
         uint32_t index = GetNextQueueIndex();
@@ -110,12 +124,12 @@ JobHandle JobSystem::Submit(std::vector<Job> jobs) {
 }
 
 void JobSystem::Wait(const JobHandle& handle) {
-    if (!handle.counter) return;
+    if (!handle.counter || !handle.mutex || !handle.cv) return;
 
-    // block until counter hits zero
-    // atomic::wait() sleeps the thread until the value changes
-    while (handle.counter->load() > 0)
-        handle.counter->wait(handle.counter->load());
+    std::unique_lock<std::mutex> lock(*handle.mutex);
+    handle.cv->wait(lock, [&handle] {
+        return handle.counter->load() == 0;
+        });
 }
 
 void JobSystem::WorkerThread(uint32_t index) {
