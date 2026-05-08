@@ -37,7 +37,8 @@ void ArenaAllocator::Shutdown() {
         _aligned_free(m_memory);
 #else
         free(m_memory);
-#endif        m_memory = nullptr;
+#endif
+        m_memory = nullptr;
     }
     m_size = 0;
     m_offset = 0;
