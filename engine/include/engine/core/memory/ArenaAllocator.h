@@ -13,11 +13,11 @@ public:
     ArenaAllocator() = default;
     ~ArenaAllocator();
 
-    // allocate backing memory - call once after construction
+    // allocate backing memory: call once after construction
     void Init(size_t sizeBytes);
     void Shutdown();
 
-    // allocate from arena — just moves pointer forward
+    // allocate from arena: just moves pointer forward
     void* Alloc(size_t size, size_t alignment = 8);
 
     // typed convenience
@@ -26,7 +26,7 @@ public:
         return static_cast<T*>(Alloc(sizeof(T) * count, alignof(T)));
     }
 
-    // free everything - pointer resets to start
+    // free everything: pointer resets to start
     void Reset();
 
     // debug

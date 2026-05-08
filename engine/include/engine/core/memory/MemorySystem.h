@@ -25,13 +25,13 @@ enum class MemoryCategory : uint8_t {
 
 
 struct MemoryConfig {
-    size_t frameSize = 4 * 1024 * 1024;  //  4MB — per frame temp data
-    size_t ecsSize = 64 * 1024 * 1024;  // 64MB — entity/component chunks
-    size_t assetSize = 32 * 1024 * 1024;  // 32MB — asset loading scratch
-    size_t renderSize = 16 * 1024 * 1024;  // 16MB — render temp buffers
-    size_t audioSize = 8 * 1024 * 1024;  //  8MB — audio working memory
-    size_t generalSize = 32 * 1024 * 1024;  // 32MB — everything else
-    size_t stackSize = 8 * 1024 * 1024;  //  8MB — scoped temp memory
+    size_t frameSize = 4 * 1024 * 1024;  //  4MB - per frame temp data
+    size_t ecsSize = 64 * 1024 * 1024;  // 64MB - entity/component chunks
+    size_t assetSize = 32 * 1024 * 1024;  // 32MB - asset loading scratch
+    size_t renderSize = 16 * 1024 * 1024;  // 16MB - render temp buffers
+    size_t audioSize = 8 * 1024 * 1024;  //  8MB - audio working memory
+    size_t generalSize = 32 * 1024 * 1024;  // 32MB - everything else
+    size_t stackSize = 8 * 1024 * 1024;  //  8MB - scoped temp memory
 };
 
 

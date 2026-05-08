@@ -113,6 +113,7 @@ void WindowGlfw::SetupOpenGLDebugCallback()
             UNREFERENCED_PARAMETER(type);
             UNREFERENCED_PARAMETER(id);
             UNREFERENCED_PARAMETER(length);
+            UNREFERENCED_PARAMETER(userParam);
             if (severity != GL_DEBUG_SEVERITY_NOTIFICATION)
                 printf("[GL] %s\n", message);
             else {

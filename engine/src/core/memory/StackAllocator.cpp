@@ -32,7 +32,7 @@ void StackAllocator::Init(size_t sizeBytes) {
 #if __MAC_OS_X_VERSION_MIN_REQUIRED >= 101500
     m_memory = static_cast<uint8_t*>(aligned_alloc(64, alignedSize));
 #else
-    // fallback for macOS < 10.15 — posix_memalign is available on 10.14
+    // fallback for macOS < 10.15: posix_memalign is available on 10.14
     void* ptr = nullptr;
     posix_memalign(&ptr, 64, alignedSize);
     m_memory = static_cast<uint8_t*>(ptr);

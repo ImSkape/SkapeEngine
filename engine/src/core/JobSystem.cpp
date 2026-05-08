@@ -62,7 +62,7 @@ JobHandle JobSystem::Submit(Job job) {
     auto counter = handle.counter;
     Job wrappedJob = [job = std::move(job), counter]() {
         job();
-        counter->fetch_sub(1);  // decrement - if hits 0 job is done
+        counter->fetch_sub(1);  // decrement, if hits 0 job is done
         counter->notify_all();  // wake anyone waiting on this handle
         };
 
@@ -85,7 +85,7 @@ JobHandle JobSystem::Submit(std::vector<Job> jobs) {
         return handle;
     }
 
-    // counter starts at number of jobs — decrements as each completes
+    // counter starts at number of jobs, decrements as each completes
     JobHandle handle;
     handle.counter = std::make_shared<std::atomic<int>>((int)jobs.size());
 
@@ -143,7 +143,7 @@ void JobSystem::WorkerThread(uint32_t index) {
             job();  // execute the job
         }
         else {
-            // nothing to do — sleep until woken
+            // nothing to do, sleep until woken
             std::unique_lock<std::mutex> lock(myQueue.mutex);
             myQueue.cv.wait(lock, [&] {
                 return !myQueue.jobs.empty() || !m_running;
@@ -152,7 +152,7 @@ void JobSystem::WorkerThread(uint32_t index) {
     }
 
     // drain remaining jobs before exiting
-    // important — don't leave jobs unfinished when shutting down
+    // important, don't leave jobs unfinished when shutting down
     while (true) {
         Job job;
         bool gotJob = false;
@@ -178,7 +178,7 @@ bool JobSystem::TrySteal(uint32_t thiefIndex, Job& outJob) {
 
         std::lock_guard<std::mutex> lock(m_queues[i]->mutex);
         if (!m_queues[i]->jobs.empty()) {
-            // steal from the back — victim pops from front
+            // steal from the back, victim pops from front
             // minimises contention between thief and victim
             outJob = std::move(m_queues[i]->jobs.back());
             m_queues[i]->jobs.pop_back();

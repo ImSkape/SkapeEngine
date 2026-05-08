@@ -15,7 +15,7 @@ public:
     virtual void Bind() = 0;
     virtual void Unbind() = 0;
 
-    // uniform setters — engine never calls GL directly
+    // uniform setters: engine never calls GL directly
     virtual void SetInt(const std::string& name, int value) = 0;
     virtual void SetFloat(const std::string& name, float value) = 0;
     virtual void SetFloat2(const std::string& name, const glm::vec2& v) = 0;
