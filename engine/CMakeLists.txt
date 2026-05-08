@@ -8,6 +8,7 @@ include/engine/core/ServiceLocator.h
 include/engine/core/SEResult.h
 include/engine/core/System.h
 include/engine/core/WindowSystem.h
+include/engine/core/JobSystem.h
 include/engine/core/memory/MemorySystem.h
 include/engine/core/memory/PoolAllocator.h
 include/engine/core/memory/StackAllocator.h
@@ -35,6 +36,7 @@ set(ENGINE_SOURCES
 src/core/Application.cpp
 src/core/ServiceLocator.cpp
 src/core/WindowSystem.cpp
+src/core/JobSystem.cpp
 src/core/memory/MemorySystem.cpp
 src/core/memory/StackAllocator.cpp
 src/core/memory/ArenaAllocator.cpp

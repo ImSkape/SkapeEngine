@@ -40,6 +40,7 @@ void MemorySystem::Shutdown() {
         m_arenas[i].Shutdown();
     m_stack.Shutdown();
     m_initialized = false;
+    printf("[MemorySystem] Shutdown\n");
 }
 
 ArenaAllocator& MemorySystem::GetArena(MemoryCategory category) {

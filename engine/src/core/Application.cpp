@@ -125,6 +125,8 @@ void Application::InitEngine()
     RegisterSystem(&m_memorySystem);
 
 
+    // job system early — asset manager and ECS need it
+    RegisterSystem(&m_jobSystem);
 
 
 

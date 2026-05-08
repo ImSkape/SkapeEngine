@@ -24,7 +24,7 @@ SEResult RenderSystem::Init() {
     if (!result)
         return result;
 
-    printf("[Renderer] Initialized\n");
+    printf("[RenderSystem] Initialized\n");
     return SEResult::ok();
 }
 
@@ -32,6 +32,7 @@ void RenderSystem::Shutdown() {
     if (m_context)
         m_context->Shutdown();
     m_initialized = false;
+    printf("[RenderSystem] Shutdown\n");
 }
 
 void RenderSystem::BeginFrame() {

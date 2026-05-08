@@ -15,6 +15,7 @@ set(TEST_SOURCES
     core/memory/StackAllocatorTests.cpp
     core/memory/PoolAllocatorTests.cpp
     core/memory/MemorySystemTests.cpp
+    core/JobSystemTests.cpp
     core/ServiceLocatorTests.cpp
 )
 

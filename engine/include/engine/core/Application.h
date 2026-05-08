@@ -8,12 +8,12 @@
 #include "engine/core/WindowSystem.h"
 #include "engine/render/RenderSystem.h"
 #include "engine/core/memory/MemorySystem.h"
-#include <memory>
+#include "engine/core/JobSystem.h"
 #include "engine/render/GPUBuffer.h"
 #include "engine/render/GPUShader.h"
-#include "engine/render/CommandBuffer.h"
 #include "engine/render/RenderPass.h"
 #include "engine/core/ServiceLocator.h"
+#include <memory>
 class Application {
 public:
     Application();
@@ -82,6 +82,7 @@ private:
     MemorySystem m_memorySystem;
     WindowSystem m_windowSystem;
     RenderSystem m_renderSystem;
+    JobSystem    m_jobSystem;
     bool m_running = false;
 
     bool m_headless = false;
