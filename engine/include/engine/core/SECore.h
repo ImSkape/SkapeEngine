@@ -22,21 +22,21 @@
 #define UNREFERENCED_PARAMETER(P) (void)(P)
 
 
-// platform detection
-#if defined(_WIN32)
-#define PLATFORM_WINDOWS
-#elif defined(__APPLE__)
-#include <TargetConditionals.h>
-#if TARGET_OS_IOS
-#define PLATFORM_IOS
-#else
-#define PLATFORM_MAC
-#endif
-#elif defined(__ANDROID__)
-#define PLATFORM_ANDROID
-#elif defined(__linux__)
-#define PLATFORM_LINUX
-#endif
+// // platform detection
+// #if defined(_WIN32)
+// #define PLATFORM_WINDOWS
+// #elif defined(__APPLE__)
+// #include <TargetConditionals.h>
+// #if TARGET_OS_IOS
+// #define PLATFORM_IOS
+// #else
+// #define PLATFORM_MAC
+// #endif
+// #elif defined(__ANDROID__)
+// #define PLATFORM_ANDROID
+// #elif defined(__linux__)
+// #define PLATFORM_LINUX
+// #endif
 
 
 #if defined(PLATFORM_WINDOWS)

@@ -6,7 +6,7 @@ TEST_CASE("MemorySystem: Init and Shutdown", "[memory][system]") {
     SECTION("initializes with default config") {
         MemorySystem memory;
         SEResult result = memory.Init();
-        REQUIRE(result.ok);
+        REQUIRE(result.ok());
         memory.Shutdown();
     }
 
@@ -22,7 +22,7 @@ TEST_CASE("MemorySystem: Init and Shutdown", "[memory][system]") {
         config.stackSize   = 1 * 1024 * 1024;
         memory.Configure(config);
         SEResult result = memory.Init();
-        REQUIRE(result.ok);
+        REQUIRE(result.ok());
         memory.Shutdown();
     }
 
@@ -34,7 +34,7 @@ TEST_CASE("MemorySystem: Init and Shutdown", "[memory][system]") {
         // after shutdown all arenas should report zero capacity
         // re-init should work cleanly
         SEResult result = memory.Init();
-        REQUIRE(result.ok);
+        REQUIRE(result.ok());
         memory.Shutdown();
     }
 }
