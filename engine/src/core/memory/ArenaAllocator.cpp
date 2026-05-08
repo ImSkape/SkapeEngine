@@ -39,7 +39,7 @@ void* ArenaAllocator::Alloc(size_t size, size_t alignment) {
     size_t aligned = (m_offset + alignment - 1) & ~(alignment - 1);
 
     // check we have enough space
-    assert(aligned + size <= m_size && "ArenaAllocator out of memory");
+    // assert(aligned + size <= m_size && "ArenaAllocator out of memory");
     if (aligned + size > m_size) return nullptr;
 
     void* ptr = m_memory + aligned;
