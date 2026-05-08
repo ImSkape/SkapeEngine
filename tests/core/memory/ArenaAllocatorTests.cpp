@@ -67,7 +67,7 @@ TEST_CASE("ArenaAllocator: Allocation", "[memory][arena]") {
     arena.Shutdown();
 }
 
-TEST_CASE("ArenaAllocator — Alignment", "[memory][arena]") {
+TEST_CASE("ArenaAllocator: Alignment", "[memory][arena]") {
     ArenaAllocator arena;
     arena.Init(1024);
 
@@ -98,7 +98,7 @@ TEST_CASE("ArenaAllocator — Alignment", "[memory][arena]") {
     arena.Shutdown();
 }
 
-TEST_CASE("ArenaAllocator — Reset", "[memory][arena]") {
+TEST_CASE("ArenaAllocator: Reset", "[memory][arena]") {
     ArenaAllocator arena;
     arena.Init(1024);
 
@@ -125,7 +125,7 @@ TEST_CASE("ArenaAllocator — Reset", "[memory][arena]") {
     arena.Shutdown();
 }
 
-TEST_CASE("ArenaAllocator — Contains", "[memory][arena]") {
+TEST_CASE("ArenaAllocator: Contains", "[memory][arena]") {
     ArenaAllocator arena;
     arena.Init(1024);
 
@@ -154,7 +154,7 @@ TEST_CASE("ArenaAllocator — Contains", "[memory][arena]") {
     arena.Shutdown();
 }
 
-TEST_CASE("ArenaAllocator — Fill capacity", "[memory][arena]") {
+TEST_CASE("ArenaAllocator: Fill capacity", "[memory][arena]") {
     ArenaAllocator arena;
     arena.Init(256);
 
