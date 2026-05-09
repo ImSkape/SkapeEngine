@@ -68,17 +68,17 @@ void TimeSystem::Tick() {
 
     // accumulator uses unscaled dt but fixed step is scaled at read time
     // this means pausing (timeScale=0) stops fixed updates naturally
-    m_accumulator += m_deltaTime;
+    m_accumulator += m_unscaledDeltaTime;
 
     m_frameCount++;
 }
 
 bool TimeSystem::ShouldFixedUpdate() const {
-    return m_accumulator >= m_config.fixedTimestep * m_config.timeScale;
+    return m_accumulator >= m_config.fixedTimestep ;
 }
 
 void TimeSystem::ConsumeFixedUpdate() {
-    m_accumulator -= m_config.fixedTimestep * m_config.timeScale;
+    m_accumulator -= m_config.fixedTimestep;
 }
 
 
