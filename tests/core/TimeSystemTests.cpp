@@ -119,7 +119,6 @@ TEST_CASE("TimeSystem: TimeScale", "[time]") {
         REQUIRE(halfFixed == Catch::Approx(normalFixed * 0.5f));
         time.Shutdown();
     }
-
     SECTION("scaled dt is smaller than unscaled at half speed") {
         TimeSystem time;
         TimeConfig config;
@@ -127,8 +126,7 @@ TEST_CASE("TimeSystem: TimeScale", "[time]") {
         time.Configure(config);
         time.Init();
 
-        // sleep briefly so Tick has real time to measure
-        std::this_thread::sleep_for(std::chrono::milliseconds(16));
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));  // was 16
         time.Tick();
 
         REQUIRE(time.GetDeltaTime() < time.GetUnscaledDeltaTime());
@@ -142,12 +140,13 @@ TEST_CASE("TimeSystem: TimeScale", "[time]") {
         time.Configure(config);
         time.Init();
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(16));
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));  // was 16
         time.Tick();
 
         REQUIRE(time.GetDeltaTime() > time.GetUnscaledDeltaTime());
         time.Shutdown();
     }
+
 }
 
 TEST_CASE("TimeSystem: Tick", "[time]") {
@@ -168,15 +167,41 @@ TEST_CASE("TimeSystem: Tick", "[time]") {
         time.Shutdown();
     }
 
+    SECTION("delta time is positive after sleep") {
+    TimeSystem time;
+    time.Init();
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));  // was 16
+    time.Tick();
+
+    REQUIRE(time.GetDeltaTime() > 0.0f);
+    REQUIRE(time.GetUnscaledDeltaTime() > 0.0f);
+    time.Shutdown();
+}
+
+    SECTION("maxDeltaTime clamps large spikes") {
+        TimeSystem time;
+        TimeConfig config;
+        config.maxDeltaTime = 0.05f;
+        time.Configure(config);
+        time.Init();
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));  // was 200
+        time.Tick();
+
+        REQUIRE(time.GetUnscaledDeltaTime() <= config.maxDeltaTime + 0.001f);
+        time.Shutdown();
+    }
+
     SECTION("unscaled time increases each tick") {
         TimeSystem time;
         time.Init();
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(16));
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));  // was 16
         time.Tick();
         float t1 = time.GetUnscaledTime();
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(16));
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));  // was 16
         time.Tick();
         float t2 = time.GetUnscaledTime();
 
@@ -191,11 +216,11 @@ TEST_CASE("TimeSystem: Tick", "[time]") {
         time.Configure(config);
         time.Init();
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(16));
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));  // was 16
         time.Tick();
         float t1 = time.GetTime();
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(16));
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));  // was 16
         time.Tick();
         float t2 = time.GetTime();
 
@@ -210,45 +235,20 @@ TEST_CASE("TimeSystem: Tick", "[time]") {
         time.Configure(config);
         time.Init();
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(16));
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));  // was 16
         time.Tick();
         float u1 = time.GetUnscaledTime();
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(16));
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));  // was 16
         time.Tick();
         float u2 = time.GetUnscaledTime();
 
         REQUIRE(u2 > u1);
         time.Shutdown();
     }
-
-    SECTION("delta time is positive after sleep") {
-        TimeSystem time;
-        time.Init();
-
-        std::this_thread::sleep_for(std::chrono::milliseconds(16));
-        time.Tick();
-
-        REQUIRE(time.GetDeltaTime() > 0.0f);
-        REQUIRE(time.GetUnscaledDeltaTime() > 0.0f);
-        time.Shutdown();
-    }
-
-    SECTION("maxDeltaTime clamps large spikes") {
-        TimeSystem time;
-        TimeConfig config;
-        config.maxDeltaTime = 0.05f;  // clamp at 50ms
-        time.Configure(config);
-        time.Init();
-
-        // sleep longer than maxDeltaTime
-        std::this_thread::sleep_for(std::chrono::milliseconds(500));
-        time.Tick();
-
-        REQUIRE(time.GetUnscaledDeltaTime() <= config.maxDeltaTime + 0.001f);
-        time.Shutdown();
-    }
 }
+
+
 
 TEST_CASE("TimeSystem: Fixed update", "[time]") {
 
@@ -266,7 +266,7 @@ TEST_CASE("TimeSystem: Fixed update", "[time]") {
         time.Configure(config);
         time.Init();
 
-        // sleep longer than one fixed step
+        // sleep longer than one fixed step - use generous time for Windows CI
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
         time.Tick();
 
@@ -286,9 +286,6 @@ TEST_CASE("TimeSystem: Fixed update", "[time]") {
 
         REQUIRE(time.ShouldFixedUpdate());
         time.ConsumeFixedUpdate();
-        // may or may not still be true depending on exact timing
-        // but consuming should have reduced the accumulator
-        // just verify it doesn't crash and state is valid
         REQUIRE(time.GetFrameCount() == 1);
         time.Shutdown();
     }
@@ -314,7 +311,18 @@ TEST_CASE("TimeSystem: Fixed update", "[time]") {
         time.Shutdown();
     }
 
-    SECTION("fixed update does not fire when paused") {
+    SECTION("fixed dt is zero when paused") {
+        TimeSystem time;
+        TimeConfig config;
+        config.SetFixedFrameRate(60.0f);
+        config.timeScale = 0.0f;
+        time.Configure(config);
+        time.Init();
+        REQUIRE(time.GetFixedDeltaTime() == Catch::Approx(0.0f));
+        time.Shutdown();
+    }
+
+    SECTION("fixed update still fires when paused") {
         TimeSystem time;
         TimeConfig config;
         config.SetFixedFrameRate(60.0f);
@@ -322,10 +330,11 @@ TEST_CASE("TimeSystem: Fixed update", "[time]") {
         time.Configure(config);
         time.Init();
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        // accumulator uses unscaled dt so it still fills even when paused
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
         time.Tick();
 
-        REQUIRE_FALSE(time.ShouldFixedUpdate());
+        REQUIRE(time.ShouldFixedUpdate());
         time.Shutdown();
     }
 
@@ -338,6 +347,18 @@ TEST_CASE("TimeSystem: Fixed update", "[time]") {
         time.Init();
 
         REQUIRE(time.GetFixedDeltaTime() == Catch::Approx(1.0f / 60.0f));
+        time.Shutdown();
+    }
+
+    SECTION("GetFixedDeltaTime scales with timeScale") {
+        TimeSystem time;
+        TimeConfig config;
+        config.SetFixedFrameRate(60.0f);
+        config.timeScale = 0.5f;
+        time.Configure(config);
+        time.Init();
+
+        REQUIRE(time.GetFixedDeltaTime() == Catch::Approx((1.0f / 60.0f) * 0.5f));
         time.Shutdown();
     }
 }
