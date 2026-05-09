@@ -242,7 +242,7 @@ TEST_CASE("TimeSystem: Tick", "[time]") {
         time.Init();
 
         // sleep longer than maxDeltaTime
-        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
         time.Tick();
 
         REQUIRE(time.GetUnscaledDeltaTime() <= config.maxDeltaTime + 0.001f);
@@ -267,7 +267,7 @@ TEST_CASE("TimeSystem: Fixed update", "[time]") {
         time.Init();
 
         // sleep longer than one fixed step
-        std::this_thread::sleep_for(std::chrono::milliseconds(20));
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
         time.Tick();
 
         REQUIRE(time.ShouldFixedUpdate());
@@ -281,7 +281,7 @@ TEST_CASE("TimeSystem: Fixed update", "[time]") {
         time.Configure(config);
         time.Init();
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(20));
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
         time.Tick();
 
         REQUIRE(time.ShouldFixedUpdate());
@@ -301,7 +301,7 @@ TEST_CASE("TimeSystem: Fixed update", "[time]") {
         time.Init();
 
         // sleep long enough for multiple fixed steps
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
         time.Tick();
 
         int fixedCount = 0;
@@ -322,7 +322,7 @@ TEST_CASE("TimeSystem: Fixed update", "[time]") {
         time.Configure(config);
         time.Init();
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
         time.Tick();
 
         REQUIRE_FALSE(time.ShouldFixedUpdate());
