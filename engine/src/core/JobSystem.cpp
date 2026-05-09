@@ -68,8 +68,10 @@ JobHandle JobSystem::Submit(Job job) {
 
     Job wrappedJob = [job = std::move(job), counter, mutex, cv]() {
         job();
-        counter->fetch_sub(1);
-        std::lock_guard<std::mutex> lock(*mutex);
+        {
+            std::lock_guard<std::mutex> lock(*mutex);  // lock BEFORE decrement
+            counter->fetch_sub(1);
+        }
         cv->notify_all();
         };
 
@@ -107,8 +109,10 @@ JobHandle JobSystem::Submit(std::vector<Job> jobs) {
     for (auto& job : jobs) {
         Job wrappedJob = [j = std::move(job), counter, mutex, cv]() {
             j();
-            counter->fetch_sub(1);
-            std::lock_guard<std::mutex> lock(*mutex);
+            {
+                std::lock_guard<std::mutex> lock(*mutex);
+                counter->fetch_sub(1);
+            }
             cv->notify_all();
             };
 
@@ -125,6 +129,7 @@ JobHandle JobSystem::Submit(std::vector<Job> jobs) {
 
 void JobSystem::Wait(const JobHandle& handle) {
     if (!handle.counter || !handle.mutex || !handle.cv) return;
+    if (handle.counter->load() == 0) return;
 
     std::unique_lock<std::mutex> lock(*handle.mutex);
     handle.cv->wait(lock, [&handle] {
