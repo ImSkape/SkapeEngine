@@ -38,6 +38,10 @@ public:
     float GetFixedDeltaTime() const { return m_config.fixedTimestep * m_config.timeScale; }
     float GetTime()           const { return m_time; }
 
+    void SetFixedFrameRate(const float frameRate) {
+        m_config.fixedTimestep = 1.0f / frameRate;
+    }
+
     // unscaled time - real wall clock, ignores timeScale
     float GetUnscaledDeltaTime() const { return m_unscaledDeltaTime; }
     float GetUnscaledTime()      const { return m_unscaledTime; }
