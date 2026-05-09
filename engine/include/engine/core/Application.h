@@ -6,6 +6,7 @@
 
 #pragma once
 #include "engine/core/WindowSystem.h"
+#include "engine/core/TimeSystem.h"
 #include "engine/render/RenderSystem.h"
 #include "engine/core/memory/MemorySystem.h"
 #include "engine/core/JobSystem.h"
@@ -80,6 +81,7 @@ private:
 
     std::vector<System*> m_systems;
     MemorySystem m_memorySystem;
+    TimeSystem   m_timeSystem;
     WindowSystem m_windowSystem;
     RenderSystem m_renderSystem;
     JobSystem    m_jobSystem;

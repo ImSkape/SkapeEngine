@@ -37,39 +37,30 @@ void Application::Run(const std::string& projectPath)
 
 
     m_running = true;
-    // TIMING SETUP
-    float fixedTimestep = 1.0f / 60.0f;
-    float accumulator = 0.0f;
-    float lastTime = (float)glfwGetTime();
+
 
     // Loop until the user closes the window
     while (m_running && !m_windowSystem.ShouldClose())
     {
         m_memorySystem.ResetFrameArenas();  // first — wipe last frame's temp data
 
-        //  DELTA TIME
-        float currentTime = (float)glfwGetTime();
-        float dt = currentTime - lastTime;
-        lastTime = currentTime;
+        // tick time - updates dt, accumulator, frame count
+        m_timeSystem.Tick();
 
-
-        // clamp so debugger pauses don't explode physics
-        dt = std::min(dt, 0.25f);
-        accumulator += dt;
 
         // FIXED UPDATE
-        while (accumulator >= fixedTimestep) {
-            FixedUpdate(fixedTimestep);
-            accumulator -= fixedTimestep;
+        while (m_timeSystem.ShouldFixedUpdate()) {
+            FixedUpdate(m_timeSystem.GetFixedDeltaTime());
+            m_timeSystem.ConsumeFixedUpdate();
         }
 
         // UPDATE
-        // input, camera, game logic � variable timestep
-        Update(dt);
+        // input, camera, game logic: variable timestep
+        Update(m_timeSystem.GetDeltaTime());
 
         //  LATE UPDATE
         // camera follow, animation finalize, read-only
-        LateUpdate(dt);
+        LateUpdate(m_timeSystem.GetDeltaTime());
 
         Render();
         
@@ -100,13 +91,18 @@ void Application::RunHeadless(const std::string& projectPath, int frames)
     PreInit();
     Init();
     PostInit();
-    float fixedTimestep = 1.0f / 60.0f;
+
     for (int i = 0; i < frames; i++) {
         m_memorySystem.ResetFrameArenas();
-        FixedUpdate(fixedTimestep);
-        Update(fixedTimestep);
-        LateUpdate(fixedTimestep);
-        // no render � no window or GPU context in headless
+        m_timeSystem.Tick();
+
+        while (m_timeSystem.ShouldFixedUpdate()) {
+            FixedUpdate(m_timeSystem.GetFixedDeltaTime());
+            m_timeSystem.ConsumeFixedUpdate();
+        }
+
+        Update(m_timeSystem.GetDeltaTime());
+        LateUpdate(m_timeSystem.GetDeltaTime());
     }
 
     PreShutdown();
@@ -124,6 +120,10 @@ void Application::InitEngine()
     MemoryConfig memConfig;  // uses defaults
     m_memorySystem.Configure(memConfig);
     RegisterSystem(&m_memorySystem);
+
+
+    // time before window - nothing depends on time but everything uses it
+    RegisterSystem(&m_timeSystem);
 
 
     // job system early — asset manager and ECS need it
