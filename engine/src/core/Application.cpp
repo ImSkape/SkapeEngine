@@ -5,16 +5,8 @@
 //-------------------------------------
 #include "engine/core/SECore.h"
 #include "engine/core/Application.h"
-#include "engine/platform/glfw/WindowGlfw.h"
 #include "engine/core/SEResult.h"
-#include "engine/core/ServiceLocator.h"
-// TODO: remove � glClear moves to Renderer::BeginFrame(), 
-//       glfwGetTime() moves to platform Time abstraction
-#include "glad/glad.h"
-#include "GLFW/glfw3.h"
 #include <cstdio>
-#include <memory>
-
 Application::Application()
 {
 }
@@ -140,10 +132,8 @@ void Application::InitEngine()
     config.title = "Skape Engine";
     config.vsync = true;
     m_windowSystem.Configure(config);
-    if (!m_headless) {
-        RegisterSystem(&m_windowSystem);
-        RegisterSystem(&m_renderSystem);
-    }
+    RegisterSystem(&m_windowSystem);
+    RegisterSystem(&m_renderSystem);
 
 
     //if (!m_headless) {
