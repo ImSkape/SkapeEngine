@@ -9,12 +9,12 @@
 #include <algorithm>
 
 // platform time includes
-#if defined(PLATFORM_WINDOWS) || defined(PLATFORM_MAC) || defined(PLATFORM_LINUX)
-#include <GLFW/glfw3.h>
-#elif defined(PLATFORM_ANDROID)
+#if defined(PLATFORM_ANDROID)
 #include <time.h>
 #elif defined(PLATFORM_IOS)
 #include <mach/mach_time.h>
+#else
+#include <chrono>  // PC - Windows, Mac, Linux all use chrono
 #endif
 
 void TimeSystem::Configure(const TimeConfig& config) {
@@ -85,10 +85,7 @@ void TimeSystem::ConsumeFixedUpdate() {
 
 
 double TimeSystem::GetPlatformTime() const {
-#if defined(PLATFORM_WINDOWS) || defined(PLATFORM_MAC) || defined(PLATFORM_LINUX)
-    return glfwGetTime();
-
-#elif defined(PLATFORM_ANDROID)
+#if defined(PLATFORM_ANDROID)
     struct timespec ts;
     clock_gettime(CLOCK_MONOTONIC, &ts);
     return static_cast<double>(ts.tv_sec) +
@@ -105,6 +102,9 @@ double TimeSystem::GetPlatformTime() const {
         1000000000.0;
 
 #else
-    return 0.0;
+    // Windows, Mac, Linux - chrono works headless, no GLFW init needed
+    static const auto start = std::chrono::high_resolution_clock::now();
+    auto now = std::chrono::high_resolution_clock::now();
+    return std::chrono::duration<double>(now - start).count();
 #endif
 }
