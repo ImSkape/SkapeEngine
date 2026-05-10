@@ -18,6 +18,7 @@ set(TEST_SOURCES
     core/TimeSystemTests.cpp
     core/JobSystemTests.cpp
     core/ServiceLocatorTests.cpp
+    core/PlatformCapabilitiesTests.cpp
 )
 
 add_executable(EngineTests ${TEST_SOURCES})

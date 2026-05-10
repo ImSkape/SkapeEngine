@@ -7,6 +7,7 @@ include/engine/core/Application.h
 include/engine/core/ServiceLocator.h
 include/engine/core/SEResult.h
 include/engine/core/System.h
+include/engine/core/PlatformCapabilities.h
 include/engine/core/WindowSystem.h
 include/engine/core/JobSystem.h
 include/engine/core/TimeSystem.h
@@ -36,6 +37,7 @@ include/engine/render/opengl/GLTexture.h
 set(ENGINE_SOURCES
 src/core/Application.cpp
 src/core/ServiceLocator.cpp
+src/core/PlatformCapabilities.cpp
 src/core/WindowSystem.cpp
 src/core/JobSystem.cpp
 src/core/TimeSystem.cpp
