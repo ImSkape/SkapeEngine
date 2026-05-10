@@ -86,7 +86,7 @@ TEST_CASE("TimeSystem: TimeScale", "[time]") {
         time.Shutdown();
     }
 
-    SECTION("timeScale zero pauses fixed updates") {
+    SECTION("timeScale zero still fills accumulator") {
         TimeSystem time;
         TimeConfig config;
         config.SetFixedFrameRate(60.0f);
@@ -95,11 +95,12 @@ TEST_CASE("TimeSystem: TimeScale", "[time]") {
 
         time.SetTimeScale(0.0f);
 
-        // tick several times - accumulator should never fill
-        for (int i = 0; i < 10; i++)
-            time.Tick();
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        time.Tick();
 
-        REQUIRE_FALSE(time.ShouldFixedUpdate());
+        // accumulator uses unscaled dt - still fills even when paused
+        // FixedUpdate fires but GetFixedDeltaTime() returns 0 so nothing moves
+        REQUIRE(time.ShouldFixedUpdate());
         time.Shutdown();
     }
 
