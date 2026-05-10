@@ -13,18 +13,12 @@ Application::Application()
 
 void Application::Run(const std::string& projectPath)
 {
+    // TODO: use projectPath to load project.json
     UNREFERENCED_PARAMETER(projectPath);
     InitEngine();
 
-    // before anything starts - config, settings overrides
     PreInit();
-
-
-
-    // renderer, audio, input etc will init here later
     Init();
-
-    // everything is up, spawn entities, start audio, etc
     PostInit();
 
 
@@ -47,31 +41,20 @@ void Application::Run(const std::string& projectPath)
         }
 
         // UPDATE
-        // input, camera, game logic: variable timestep
         Update(m_timeSystem.GetDeltaTime());
 
-        //  LATE UPDATE
-        // camera follow, animation finalize, read-only
         LateUpdate(m_timeSystem.GetDeltaTime());
 
         Render();
         
         #ifdef ENGINE_EDITOR
-            ImGuiRender();
+        EditorRender();
         #endif
     }
 
-    // save state, flush anything in flight
     PreShutdown();
-
-    // engine systems tear down � logging flush etc
     Shutdown();
-
-    //Anything left hanging
     PostShutdown();
-
-
-
     ShutdownEngine();
 }
 
@@ -239,19 +222,28 @@ void Application::Update(float dt)
 
 void Application::FixedUpdate(float dt)
 {
-    UNREFERENCED_PARAMETER(dt);
+    for (auto* system : m_systems)
+        system->FixedUpdate(dt);
 }
 
 void Application::LateUpdate(float dt)
 {
-    UNREFERENCED_PARAMETER(dt);
+    for (auto* system : m_systems)
+        system->LateUpdate(dt);
 }
 
 void Application::Render()
 {
+
+
+
+    //temp
     if (m_headless) return;
     m_renderSystem.BeginFrame();
     // scene rendering goes here later
+
+    for (auto* system : m_systems)
+        system->Render();
 
 
     m_cmd->Begin();
@@ -265,6 +257,8 @@ void Application::Render()
 
     m_renderSystem.Submit(*m_cmd);
 
+
+
     m_renderSystem.EndFrame();
 }
 
@@ -272,7 +266,7 @@ void Application::Render()
 
 
 #ifdef ENGINE_EDITOR
-void Application::ImGuiRender()
+void Application::EditorRender()
 {
 }
 #endif

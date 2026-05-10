@@ -11,11 +11,18 @@
 
 class System {
 public:
+   // Init() -> Update() -> FixedUpdate() -> LateUpdate() -> Render() -> Shutdown()
     virtual ~System() = default;
-
+    //called on EngineInit
     virtual SEResult Init()     { return SEResult::ok(); }
+
     virtual void     Shutdown() {}
-    virtual void     Update(float dt) { UNREFERENCED_PARAMETER(dt); }
+
+    virtual void     Update(float dt) { }
+    virtual void     FixedUpdate(float dt) { }
+    virtual void     LateUpdate(float dt) { }
+    virtual void     Render() { }
+
 
     // name for debugging, logging, profiler display
     virtual const std::string& GetName() const = 0;

@@ -28,40 +28,22 @@ private:
     void ShutdownEngine();
 
     // -- INIT ------------------------------------------
-    void PreInit();  // before engine systems start
-    // set config, override settings
-    // nothing is loaded yet
+    void PreInit();
 
-    void Init();  // engine systems are up
-    // load assets, create entities
-    // main setup lives here
+    void Init();
 
-    void PostInit();  // everything is loaded and ready
-    // spawn starting entities
-    // start audio, trigger intro, etc.
+    void PostInit();
 
 // --- RUNTIME ------------------------------------------
-    void Update(float dt);  // variable timestep
-    // input, camera, UI
-    // anything that should
-    // match frame rate
+    void Update(float dt);
 
-    void FixedUpdate(float dt);  // fixed timestep
-    // physics, networking
-    // deterministic logic
-    // called 0..N times per frame
+    void FixedUpdate(float dt);
 
-    void LateUpdate(float dt);  // after all updates
-    // camera follow
-    // animation finalize
-    // read-only logic
+    void LateUpdate(float dt);
 
-    void Render();  // submit draw calls
-    // separate from update
-    // never put logic here
+    void Render(); 
     #ifdef ENGINE_EDITOR
-    void ImGuiRender();  // editor/debug UI only
-    // compiled out in Release
+    void EditorRender();
     #endif
 
     // -- EVENTS ------------------------------------------
