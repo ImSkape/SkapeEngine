@@ -132,8 +132,10 @@ void Application::InitEngine()
     config.title = "Skape Engine";
     config.vsync = true;
     m_windowSystem.Configure(config);
-    RegisterSystem(&m_windowSystem);
-    RegisterSystem(&m_renderSystem);
+    if (!m_headless) {
+        RegisterSystem(&m_windowSystem);
+        RegisterSystem(&m_renderSystem);
+    }
 
 
     //if (!m_headless) {
