@@ -208,16 +208,10 @@ TEST_CASE("JobSystem: Concurrent jobs", "[jobs]") {
     jobs.Shutdown();
 }
 
-TEST_CASE("JobSystem: Concurrent jobs - multi worker", "[jobs][multi]") {
+TEST_CASE("JobSystem: Concurrent jobs - multi worker", "[jobs]") {
     JobSystem jobs;
     jobs.Init();
-
-    // all tests in this case require multiple workers
-    if (jobs.GetWorkerCount() < 2) {
-        jobs.Shutdown();
-        return;
-    }
-
+    
     SECTION("multiple batches submitted concurrently all complete") {
         std::atomic<int> counter { 0 };
         const int batchCount = 4;
@@ -242,6 +236,7 @@ TEST_CASE("JobSystem: Concurrent jobs - multi worker", "[jobs][multi]") {
     }
 
     SECTION("jobs can submit other jobs") {
+        // now works on single core too - job assist executes inner job
         std::atomic<int> counter { 0 };
 
         JobHandle outer = jobs.Submit([&jobs, &counter]() {

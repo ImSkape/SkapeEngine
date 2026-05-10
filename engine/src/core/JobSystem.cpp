@@ -129,12 +129,34 @@ JobHandle JobSystem::Submit(std::vector<Job> jobs) {
 
 void JobSystem::Wait(const JobHandle& handle) {
     if (!handle.counter || !handle.mutex || !handle.cv) return;
-    if (handle.counter->load() == 0) return;
 
-    std::unique_lock<std::mutex> lock(*handle.mutex);
-    handle.cv->wait(lock, [&handle] {
-        return handle.counter->load() == 0;
-        });
+    while (!handle.IsDone()) {
+        // try to help out by executing a job while waiting
+        Job job;
+        bool gotJob = false;
+
+        // try every queue looking for work
+        for (uint32_t i = 0; i < m_queues.size(); i++) {
+            std::lock_guard<std::mutex> lock(m_queues[i]->mutex);
+            if (!m_queues[i]->jobs.empty()) {
+                job = std::move(m_queues[i]->jobs.front());
+                m_queues[i]->jobs.pop_front();
+                gotJob = true;
+                break;
+            }
+        }
+
+        if (gotJob) {
+            job();  // execute job while waiting
+        }
+        else {
+            // nothing to help with - sleep briefly
+            std::unique_lock<std::mutex> lock(*handle.mutex);
+            handle.cv->wait_for(lock,
+                std::chrono::microseconds(100),
+                [&handle] { return handle.IsDone(); });
+        }
+    }
 }
 
 void JobSystem::WorkerThread(uint32_t index) {
